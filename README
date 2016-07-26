@@ -1,2 +1,79 @@
 the server of AGCInfoApp create on 2016.7.25
 ==============================================
+2016.7.26 更新接口
+1、用户注册 prometheus/user/register
+请求方式 POST
+参数
+{
+  "username":"",
+  "password":"",
+  "mobile":""
+}
+返回
+{
+  "errCode": 0,
+  "msg": "ok",
+  "userId": 1,
+  "token": "47650c4f4489053d5cfba9ab51514ba2a50e52ed"
+}
+
+2、登录 prometheus/user/login
+请求方式 POST
+参数
+{
+  "login":"test",
+  "password":"123456"
+}
+
+返回
+{
+  "errCode": 0,
+  "msg": "ok",
+  "userId": 1,
+  "token": "47650c4f4489053d5cfba9ab51514ba2a50e52ed"
+}
+
+3、获得用户信息 prometheus/user/getInfo?userId=1&token=47650c4f4489053d5cfba9ab51514ba2a50e52ed
+请求方式 GET
+返回
+{
+  "errCode": 0,
+  "msg": "ok",
+  "data": {
+    "id": 1,
+    "nickname": "",
+    "mobile": "13520358713",
+    "email": "",
+    "username": "test",
+    "sex": "",
+    "birthday": 0,
+    "pic": "",
+    "readNum": 0,
+    "commentNum": 0,
+    "leval": 1,
+    "preference": ""
+  }
+}
+
+
+4、编辑信息 prometheus/user/editInfo
+请求方式 POST
+参数
+{
+    "userId": 1,
+    "token":"asdffg",
+    "nickname": "",
+    "mobile": "13520358713",
+    "email": "wangchunze@126.com",
+    "username": "test",
+    "sex": "男",
+    "birthday": 0,
+    "pic": ""
+}
+
+返回
+{
+  "errCode": 0,
+  "msg": "ok"
+}
+

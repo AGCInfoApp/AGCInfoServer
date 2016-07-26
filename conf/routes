@@ -14,25 +14,26 @@ GET         /prometheus/message                      @controllers.AsyncControlle
 #routes for user
 POST        /prometheus/user/register                @controllers.UserController.userRegister
 POST        /prometheus/user/login                   @controllers.UserController.userLogin
-
-
+GET         /prometheus/user/getInfo                 @controllers.UserController.getUserInfo(userId:Long,token:String)
+POST        /prometheus/user/editInfo                @controllers.UserController.editInfo
 # routes for news
-GET         /prometheus/news/listByCat               @controllers.NewsController.getNewsBySite(cateId:Int,page:Option[Int])
-GET         /prometheus/news/getInfo                 @controllers.NewsController.getNewsInfo(cateId:Int,id:Long)
-GET         /prometheus/news/search                  @controllers.NewsController.searchNews(searchKey:String)
-GET         /prometheus/news/getKeyword              @controllers.NewsController.getRecentKeyword
+#GET         /prometheus/news/listByCat               @controllers.NewsController.getNewsBySite(cateId:Int,page:Option[Int])
+#GET         /prometheus/news/getInfo                 @controllers.NewsController.getNewsInfo(cateId:Int,id:Long)
+#GET         /prometheus/news/search                  @controllers.NewsController.searchNews(searchKey:String)
+#GET         /prometheus/news/getKeyword              @controllers.NewsController.getRecentKeyword
+#
+#GET         /prometheus/news/getNews                 @controllers.NewsController.getNewsList(cateId:Int)
+#
+#GET         /prometheus/news/deleteNews              @controllers.NewsController.deleteNews(cateId:Int,newsId:Long)
 
-GET         /prometheus/news/getNews                 @controllers.NewsController.getNewsList(cateId:Int)
-
-GET         /prometheus/news/deleteNews              @controllers.NewsController.deleteNews(cateId:Int,newsId:Long)
 #routes for comment
-POST        /prometheus/comment/create               @controllers.CommentController.createComment
-GET         /prometheus/comment/getByNews            @controllers.CommentController.getCommentByNews(newsId:Long,cateId:Int,page:Option[Int],size:Option[Int])
-GET         /prometheus/comment/getByUser            @controllers.CommentController.getCommentByUser(page:Option[Int],size:Option[Int])
+#POST        /prometheus/comment/create               @controllers.CommentController.createComment
+#GET         /prometheus/comment/getByNews            @controllers.CommentController.getCommentByNews(newsId:Long,cateId:Int,page:Option[Int],size:Option[Int])
+#GET         /prometheus/comment/getByUser            @controllers.CommentController.getCommentByUser(page:Option[Int],size:Option[Int])
 
 
 # routes for recomment
-GET         /prometheus/news/getRecommentNews        @controllers.NewsController.getRecommentNews(cateId:Int,newsId:Long)
+#GET         /prometheus/news/getRecommentNews        @controllers.NewsController.getRecommentNews(cateId:Int,newsId:Long)
 
 
 # Map static resources from the /public folder to the /assets URL path

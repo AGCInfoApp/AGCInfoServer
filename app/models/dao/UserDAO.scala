@@ -7,7 +7,7 @@ import play.api.db.slick.{HasDatabaseConfigProvider, DatabaseConfigProvider}
 import slick.driver.JdbcProfile
 
 /**
- * Created by 王春泽 on 2016/4/5.
+ * Created by 王春泽 on 2016/7/26.
  */
 @Singleton
 class UserDAO @Inject()(
@@ -89,8 +89,9 @@ class UserDAO @Inject()(
   }
 
 
-  def register(username:String,password:String,mobile:String)={
-    db.run(User.map(t=>(t.username,t.password,t.mobile)).returning(User.map(_.id))+=(username,password,mobile)
+  def register(username:String,password:String,mobile:String,createTime:Long)={
+    db.run(User.map(t=>(t.username,t.password,t.mobile,t.createTime)).returning(
+      User.map(_.id))+=(username,password,mobile,createTime)
     ).mapTo[Long]
   }
 

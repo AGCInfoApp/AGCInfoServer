@@ -2,7 +2,6 @@ package models
 
 import java.io.Writer
 
-import controllers.newsObj
 import play.api.libs.json._
 import models.tables.SlickTables._
 /**
@@ -63,81 +62,82 @@ trait JsonProtocols {
     }
   }
 
-  implicit val rComment:Writes[rComment] = new Writes[rComment]{
-    override def writes(obj:rComment):JsValue={
-      Json.obj(
-        "id"->obj.id,
-        "userId"->obj.userid,
-        "userName"->obj.userName,
-        "userPic"->obj.userPic,
-        "newsId"->obj.newsId,
-        "content"->obj.content,
-        "reId"->obj.reId,
-        "createTime"->obj.createTime
-      )
-    }
-  }
-
-  implicit val rWangyi:Writes[rWangyi] = new Writes[rWangyi]{
-    override def writes(obj:rWangyi):JsValue={
-      Json.obj(
-        "id"->obj.id,
-        "title"->obj.title,
-        "author"->obj.author,
-        "source"->obj.source,
-        "thumbnail"->obj.thumbnail,
-        "description"->obj.description,
-        "createTime"->obj.createTime,
-        "content"->obj.content,
-        "picUrls"->obj.picUrls,
-        "cateId"->obj.cateId,
-        "category"->obj.category,
-        "url"->obj.url,
-        "tags"->obj.tags
-      )
-    }
-  }
-
-
-  implicit val rLeifeng:Writes[rLeifeng] = new Writes[rLeifeng]{
-    override def writes(obj:rLeifeng):JsValue={
-      Json.obj(
-        "id"->obj.id,
-        "title"->obj.title,
-        "author"->obj.author,
-        "source"->obj.source,
-        "thumbnail"->obj.thumbnail.split("\\?").headOption,
-        "description"->obj.description,
-        "createTime"->obj.createTime,
-        "content"->obj.content,
-        "picUrls"->obj.picUrls,
-        "cateId"->obj.cateId,
-        "category"->obj.category,
-        "url"->obj.url,
-        "tags"->obj.tags
-      )
-    }
-  }
-
-
-  implicit val newsObj:Writes[newsObj] = new Writes[newsObj]{
-    override def writes(obj:newsObj):JsValue={
-      Json.obj(
-        "id"->obj.id,
-        "title"->obj.title,
-        "author"->obj.author,
-        "source"->obj.source,
-        "thumbnail"->obj.thumbnail,
-        "description"->obj.description,
-        "createTime"->obj.createTime,
-        "content"->obj.content,
-        "picUrls"->obj.picUrls,
-        "cateId"->obj.cateId,
-        "category"->obj.category,
-        "url"->obj.url,
-        "tags"->obj.tags
-      )
-    }
-  }
+//
+//  implicit val rComment:Writes[rComment] = new Writes[rComment]{
+//    override def writes(obj:rComment):JsValue={
+//      Json.obj(
+//        "id"->obj.id,
+//        "userId"->obj.userid,
+//        "userName"->obj.userName,
+//        "userPic"->obj.userPic,
+//        "newsId"->obj.newsId,
+//        "content"->obj.content,
+//        "reId"->obj.reId,
+//        "createTime"->obj.createTime
+//      )
+//    }
+//  }
+//
+//  implicit val rWangyi:Writes[rWangyi] = new Writes[rWangyi]{
+//    override def writes(obj:rWangyi):JsValue={
+//      Json.obj(
+//        "id"->obj.id,
+//        "title"->obj.title,
+//        "author"->obj.author,
+//        "source"->obj.source,
+//        "thumbnail"->obj.thumbnail,
+//        "description"->obj.description,
+//        "createTime"->obj.createTime,
+//        "content"->obj.content,
+//        "picUrls"->obj.picUrls,
+//        "cateId"->obj.cateId,
+//        "category"->obj.category,
+//        "url"->obj.url,
+//        "tags"->obj.tags
+//      )
+//    }
+//  }
+//
+//
+//  implicit val rLeifeng:Writes[rLeifeng] = new Writes[rLeifeng]{
+//    override def writes(obj:rLeifeng):JsValue={
+//      Json.obj(
+//        "id"->obj.id,
+//        "title"->obj.title,
+//        "author"->obj.author,
+//        "source"->obj.source,
+//        "thumbnail"->obj.thumbnail.split("\\?").headOption,
+//        "description"->obj.description,
+//        "createTime"->obj.createTime,
+//        "content"->obj.content,
+//        "picUrls"->obj.picUrls,
+//        "cateId"->obj.cateId,
+//        "category"->obj.category,
+//        "url"->obj.url,
+//        "tags"->obj.tags
+//      )
+//    }
+//  }
+//
+//
+//  implicit val newsObj:Writes[newsObj] = new Writes[newsObj]{
+//    override def writes(obj:newsObj):JsValue={
+//      Json.obj(
+//        "id"->obj.id,
+//        "title"->obj.title,
+//        "author"->obj.author,
+//        "source"->obj.source,
+//        "thumbnail"->obj.thumbnail,
+//        "description"->obj.description,
+//        "createTime"->obj.createTime,
+//        "content"->obj.content,
+//        "picUrls"->obj.picUrls,
+//        "cateId"->obj.cateId,
+//        "category"->obj.category,
+//        "url"->obj.url,
+//        "tags"->obj.tags
+//      )
+//    }
+//  }
 
 }

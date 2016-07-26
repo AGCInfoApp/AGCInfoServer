@@ -7,6 +7,7 @@ import models.tables.SlickTables
 import org.slf4j.LoggerFactory
 import play.api.libs.json.Json
 import play.api.mvc.{Action, Controller}
+import utils.SecureUtil
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.{Failure, Success}
@@ -35,16 +36,15 @@ class UserController @Inject()(
             userDAO.checkLogin(login,password).map{
               case Some(user)=>
                 val timestamp = System.currentTimeMillis()
-                Ok(success).withSession(
-                  SessionKey.userId -> user.id.toString,
-                  SessionKey.mobile -> user.mobile,
-                  SessionKey.email -> user.email,
-                  SessionKey.username -> user.username,
-                  SessionKey.nickName -> user.nickname,
-                  SessionKey.timestamp -> timestamp.toString,
-                  SessionKey.headImg -> user.pic,
-                  SessionKey.uType -> user.userType.toString
-                )
+                val userId = user.id
+                val userName = user.username
+                val mobile = user.mobile
+                val userPwd = user.password
+                val token = SecureUtil.getToken(List(userName,mobile,userPwd))
+                Ok(successResult(Json.obj(
+                  "userId"->userId,
+                  "token"->token
+                )))
               case None=>
                 Ok(ErrorCode.passwordErr)
             }
@@ -67,12 +67,14 @@ class UserController @Inject()(
           val username=(jsonData \ "username").as[String]
           val password=(jsonData \ "password").as[String]
           val mobile=(jsonData \ "mobile").as[String]
-          userDAO.register(username,password,mobile).map{res=>
+          val createTime = System.currentTimeMillis()
+          userDAO.register(username,password,mobile,createTime).map{res=>
+            val token = SecureUtil.getToken(List(username,password,mobile))
             if(res>0)
-              Ok(success).withSession(
-                SessionKey.userId -> res.toString,
-                SessionKey.username -> username
-              )
+              Ok(successResult(Json.obj(
+                "userId"->res,
+                "token"->token
+              )))
             else
               Ok(ErrorCode.registerErr)
           }
@@ -87,18 +89,13 @@ class UserController @Inject()(
    * 获取用户信息
    * @return
    */
-  def getUserInfo=Action.async{implicit request=>
-    request.session.get(SessionKey.userId) match {
-      case Some(userId)=>
+  def getUserInfo(userId:Long,token:String)=Action.async{implicit request=>
         userDAO.getUserById(userId.toLong).map{
           case Some(user)=>
             Ok(successResult(Json.obj("data"->user)))
           case None=>
             Ok(ErrorCode.userNotExist)
         }
-      case None=>
-        Future.successful(Ok(ErrorCode.userNotLogin))
-    }
   }
 
 
@@ -106,50 +103,47 @@ class UserController @Inject()(
    * 编辑用户信息
    * @return
    */
-  def editInfo=Action.async{implicit request=>
-    request.session.get(SessionKey.userId) match {
-      case Some(userId) =>
-        request.body.asJson match {
-          case Some(json) =>
-            val nickname=(json \ "nickname").as[String]
-            val mobile = (json \ "mobile").as[String]
-            val email = (json \ "email").as[String]
-            val sex = (json \ "sex").as[String]
-            val birthday = (json \ "birthday").as[Long]
-            val pic = (json \ "pic").as[String]
-            userDAO.getUserById(userId.toLong).flatMap{
-              case Some(user)=>
-                val u=SlickTables.rUser(
-                  userId.toLong,
-                  nickname,
-                  mobile,
-                  email,
-                user.username,
-                user.password,
-                sex,
-                birthday,
-                pic,
-                user.readNum,
-                user.commentNum,
-                user.leval,
-                user.createTime,
-                user.preference
-                )
-                userDAO.modifyUserInfo(u).map{
-                  case Success(_)=>
-                    Ok(success)
-                  case Failure(e) =>
-                    logger.error(e.getMessage)
-                    Ok(ErrorCode.userEditErr)
-                }
-              case None=>
-                Future.successful(Ok(ErrorCode.userNotExist))
+  def editInfo = Action.async { implicit request =>
+    request.body.asJson match {
+      case Some(json) =>
+        val userId = (json \ "userId").as[Long]
+        val token = (json \ "token").as[String]
+        val nickname = (json \ "nickname").as[String]
+        val mobile = (json \ "mobile").as[String]
+        val email = (json \ "email").as[String]
+        val sex = (json \ "sex").as[String]
+        val birthday = (json \ "birthday").as[Long]
+        val pic = (json \ "pic").as[String]
+        userDAO.getUserById(userId.toLong).flatMap {
+          case Some(user) =>
+            val u = SlickTables.rUser(
+              userId.toLong,
+              nickname,
+              mobile,
+              email,
+              user.username,
+              user.password,
+              sex,
+              birthday,
+              pic,
+              user.readNum,
+              user.commentNum,
+              user.leval,
+              user.createTime,
+              user.preference
+            )
+            userDAO.modifyUserInfo(u).map {
+              case Success(_) =>
+                Ok(success)
+              case Failure(e) =>
+                logger.error(e.getMessage)
+                Ok(ErrorCode.userEditErr)
             }
           case None =>
-            Future.successful(Ok(ErrorCode.requestAsJsonEmpty))
+            Future.successful(Ok(ErrorCode.userNotExist))
         }
       case None =>
-        Future.successful(Ok(ErrorCode.userNotLogin))
+        Future.successful(Ok(ErrorCode.requestAsJsonEmpty))
     }
   }
 

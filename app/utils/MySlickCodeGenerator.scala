@@ -18,9 +18,9 @@ object MySlickCodeGenerator {
 
   val slickDriver = "slick.driver.MySQLDriver"
   val jdbcDriver = "com.mysql.jdbc.Driver"
-  val url = "jdbc:mysql://139.129.25.229:3306/newsreader?characterEncoding=utf-8"
-  val user = "root"
-  val password = "wang897618476A"
+  val url = "jdbc:mysql://139.129.25.229:3306/agcInfo?characterEncoding=utf-8"
+  val user = "agcinfo"
+  val password = "wangchunze"
   val outputFolder = "target/gencode/genTables"
   val pkg = "models.tables"
   def genCustomTables() = {

@@ -16,6 +16,7 @@ POST        /prometheus/user/register                @controllers.UserController
 POST        /prometheus/user/login                   @controllers.UserController.userLogin
 GET         /prometheus/user/getInfo                 @controllers.UserController.getUserInfo(userId:Long,token:String)
 POST        /prometheus/user/editInfo                @controllers.UserController.editInfo
+
 # routes for news
 #GET         /prometheus/news/listByCat               @controllers.NewsController.getNewsBySite(cateId:Int,page:Option[Int])
 #GET         /prometheus/news/getInfo                 @controllers.NewsController.getNewsInfo(cateId:Int,id:Long)

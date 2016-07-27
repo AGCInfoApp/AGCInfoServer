@@ -23,7 +23,6 @@ class UserController @Inject()(
   private val logger = LoggerFactory.getLogger(this.getClass)
 
   /**
-   * 用户登录
    * @return
    */
   def userLogin=Action.async{implicit request=>
@@ -58,7 +57,6 @@ class UserController @Inject()(
   }
 
   /**
-   * 用户注册
    * @return
    */
   def userRegister=Action.async{implicit request=>
@@ -86,7 +84,6 @@ class UserController @Inject()(
 
 
   /**
-   * 获取用户信息
    * @return
    */
   def getUserInfo(userId:Long,token:String)=Action.async{implicit request=>
@@ -100,7 +97,6 @@ class UserController @Inject()(
 
 
   /**
-   * 编辑用户信息
    * @return
    */
   def editInfo = Action.async { implicit request =>

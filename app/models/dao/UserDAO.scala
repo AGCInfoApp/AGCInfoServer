@@ -28,7 +28,7 @@ class UserDAO @Inject()(
   }
 
   def findAdmin(login:String)={
-    db.run(User.filter(t=>t.leval===3&&((t.username===login)||(t.mobile===login)||(t.email===login))).result.headOption)
+    db.run(User.filter(t=>t.level===3&&((t.username===login)||(t.mobile===login)||(t.email===login))).result.headOption)
   }
 
   /**

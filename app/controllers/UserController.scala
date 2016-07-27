@@ -5,7 +5,7 @@ import models.JsonProtocols
 import models.dao.UserDAO
 import models.tables.SlickTables
 import org.slf4j.LoggerFactory
-import play.api.libs.json.Json
+import play.api.libs.json.{JsNull, Json}
 import play.api.mvc.{Action, Controller}
 import utils.SecureUtil
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -86,7 +86,7 @@ class UserController @Inject()(
   /**
    * @return
    */
-  def getUserInfo(userId:Long,token:String)=Action.async{implicit request=>
+  def getMyInfo(userId:Long,token:String)=Action.async{implicit request=>
         userDAO.getUserById(userId.toLong).map{
           case Some(user)=>
             Ok(successResult(Json.obj("data"->user)))
@@ -144,6 +144,93 @@ class UserController @Inject()(
         Future.successful(Ok(ErrorCode.requestAsJsonEmpty))
     }
   }
+
+
+  /**
+   * to follow some
+   * @return
+   */
+  def followOtherUser = Action.async { implicit request =>
+    request.body.asJson match {
+      case Some(json) =>
+        val userId = (json \ "userId").as[Long]
+        val friendId = (json \ "friendId").as[Long]
+        val token = (json \ "token").as[String]
+        val createTime = System.currentTimeMillis()
+        userDAO.followOther(userId, friendId, createTime).map { res =>
+            if (res > 0l)
+              Ok(success)
+            else
+              Ok(ErrorCode.followFailed)
+        }
+
+      case None =>
+        Future.successful(Ok(ErrorCode.requestAsJsonEmpty))
+    }
+  }
+
+
+  def getUserFriend(userId:Long)=Action.async{implicit request=>
+    userDAO.getFriend(userId).flatMap{seq=>
+      Future.sequence(seq.map{f=>
+        userDAO.getUserById(f.friendId).map{
+          case Some(user)=>
+            Json.obj(
+              "userId"->user.id,
+              "remarkName"->f.remarkName,
+              "nickname"->user.nickname,
+              "sex"->user.sex,
+              "pic"->user.pic,
+              "level"->user.level,
+              "signature"->user.signature
+            )
+          case None =>
+            JsNull
+        }
+      }).map{res=>
+        val data = res.filter(t=>t!=JsNull)
+        Ok(successResult(Json.obj("data"->data)))
+      }
+    }
+  }
+
+  def getUserFans(userId:Long)=Action.async{implicit request=>
+    userDAO.getFans(userId).flatMap{seq=>
+      Future.sequence(seq.map{f=>
+        userDAO.getUserById(f.userId).map{
+          case Some(user)=>
+            Json.obj(
+              "userId"->user.id,
+              "remarkName"->f.remarkName,
+              "nickname"->user.nickname,
+              "sex"->user.sex,
+              "pic"->user.pic,
+              "level"->user.level,
+              "signature"->user.signature
+            )
+          case None =>
+            JsNull
+        }
+      }).map{res=>
+        val data = res.filter(t=>t!=JsNull)
+        Ok(successResult(Json.obj("data"->data)))
+      }
+    }
+  }
+
+  def getUserInfo(userId:Long) = Action.async{implicit request=>
+    userDAO.getUserById(userId).map{res=>
+      Ok(successResult(Json.obj("data"->res)))
+    }
+  }
+
+
+
+
+
+
+
+
 
 
 

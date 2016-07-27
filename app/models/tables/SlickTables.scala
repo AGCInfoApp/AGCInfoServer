@@ -277,13 +277,13 @@ trait SlickTables {
    *  @param pic Database column pic SqlType(VARCHAR), Length(100,true), Default()
    *  @param readNum Database column read_num SqlType(INT), Default(0)
    *  @param commentNum Database column comment_num SqlType(INT), Default(0)
-   *  @param level Database column level SqlType(INT), Default(None)
+   *  @param level Database column level SqlType(INT), Default(Some(0))
    *  @param createTime Database column create_time SqlType(BIGINT), Default(0)
    *  @param preference Database column preference SqlType(VARCHAR), Length(300,true), Default()
    *  @param token Database column token SqlType(VARCHAR), Length(300,true), Default()
    *  @param userType Database column user_type SqlType(INT), Default(0)
    *  @param signature Database column signature SqlType(VARCHAR), Length(200,true), Default() */
-  case class rUser(id: Long, nickname: String = "", mobile: String = "", email: String = "", username: String = "", password: String = "", sex: String = "", birthday: Long = 0L, pic: String = "", readNum: Int = 0, commentNum: Int = 0, level: Option[Int] = None, createTime: Long = 0L, preference: String = "", token: String = "", userType: Int = 0, signature: String = "")
+  case class rUser(id: Long, nickname: String = "", mobile: String = "", email: String = "", username: String = "", password: String = "", sex: String = "", birthday: Long = 0L, pic: String = "", readNum: Int = 0, commentNum: Int = 0, level: Option[Int] = Some(0), createTime: Long = 0L, preference: String = "", token: String = "", userType: Int = 0, signature: String = "")
   /** GetResult implicit for fetching rUser objects using plain SQL queries */
   implicit def GetResultrUser(implicit e0: GR[Long], e1: GR[String], e2: GR[Int], e3: GR[Option[Int]]): GR[rUser] = GR{
     prs => import prs._
@@ -317,8 +317,8 @@ trait SlickTables {
     val readNum: Rep[Int] = column[Int]("read_num", O.Default(0))
     /** Database column comment_num SqlType(INT), Default(0) */
     val commentNum: Rep[Int] = column[Int]("comment_num", O.Default(0))
-    /** Database column level SqlType(INT), Default(None) */
-    val level: Rep[Option[Int]] = column[Option[Int]]("level", O.Default(None))
+    /** Database column level SqlType(INT), Default(Some(0)) */
+    val level: Rep[Option[Int]] = column[Option[Int]]("level", O.Default(Some(0)))
     /** Database column create_time SqlType(BIGINT), Default(0) */
     val createTime: Rep[Long] = column[Long]("create_time", O.Default(0L))
     /** Database column preference SqlType(VARCHAR), Length(300,true), Default() */

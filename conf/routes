@@ -14,8 +14,13 @@ GET         /prometheus/message                      @controllers.AsyncControlle
 #routes for user
 POST        /prometheus/user/register                @controllers.UserController.userRegister
 POST        /prometheus/user/login                   @controllers.UserController.userLogin
-GET         /prometheus/user/getInfo                 @controllers.UserController.getUserInfo(userId:Long,token:String)
+GET         /prometheus/user/getInfo                 @controllers.UserController.getMyInfo(userId:Long,token:String)
 POST        /prometheus/user/editInfo                @controllers.UserController.editInfo
+
+POST        /prometheus/user/followOther             @controllers.UserController.followOtherUser
+GET         /prometheus/user/getFriend               @controllers.UserController.getUserFriend(userId:Long)
+GET         /prometheus/user/getFans                 @controllers.UserController.getUserFans(userId:Long)
+GET         /prometheus/user/getOtherInfo            @controllers.UserController.getUserInfo(userId:Long)
 
 # routes for news
 #GET         /prometheus/news/listByCat               @controllers.NewsController.getNewsBySite(cateId:Int,page:Option[Int])

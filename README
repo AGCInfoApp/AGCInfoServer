@@ -79,3 +79,102 @@ the server of AGCInfoApp create on 2016.7.25
   "msg": "ok"
 }
 
+
+5、关注别人 prometheus/user/followOther
+请求方式 POST
+参数
+{
+    "userId": 1,
+    "friendId":2,
+    "token":"asdffg"
+}
+
+返回
+{
+  "errCode": 0,
+  "msg": "ok"
+}
+
+6、我的关注 prometheus/user/getFriend?userId=1
+请求方式 GET
+返回
+{
+  "errCode": 0,
+  "msg": "ok",
+  "data": [
+    {
+      "userId": 2,
+      "remarkName": "", --备注
+      "nickname": "",
+      "sex": "",
+      "pic": "",
+      "level": 1,
+      "signature": ""
+    }
+  ]
+}
+
+
+7、我的粉丝 prometheus/user/getFans?userId=2
+请求方式 GET
+返回同上
+
+8、查看别人资料 prometheus/user/getOtherInfo?userId=1
+请求方式 GET
+返回
+{
+  "errCode": 0,
+  "msg": "ok",
+  "data": {
+    "id": 1,
+    "nickname": "",
+    "mobile": "13520358713",
+    "email": "wangchunze@126.com",
+    "username": "test",
+    "sex": "男",
+    "birthday": 0,
+    "pic": "",
+    "readNum": 0,
+    "commentNum": 0,
+    "level": 1,
+    "preference": "",
+    "signature": ""
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

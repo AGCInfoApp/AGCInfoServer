@@ -23,6 +23,8 @@ trait JsonProtocols {
     val userEditErr  = jsonResult(1000205,"edit the info failed!")
     val hasNotRight  = jsonResult(1000206,"you doesn't have the right to do that!")
 
+    val followFailed = jsonResult(1000207,"关注失败!")
+
     val newsNotExist = jsonResult(1000301,"the news does not exist!")
     val deleteFailed = jsonResult(1000302,"failed to delete the news!")
 
@@ -56,7 +58,7 @@ trait JsonProtocols {
       "pic"->obj.pic,
       "readNum"->obj.readNum,
       "commentNum"->obj.commentNum,
-      "leval"->obj.level,
+      "level"->obj.level,
       "preference"->obj.preference,
       "signature"->obj.signature
       )

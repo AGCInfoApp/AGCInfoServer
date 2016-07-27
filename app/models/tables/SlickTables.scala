@@ -277,22 +277,23 @@ trait SlickTables {
    *  @param pic Database column pic SqlType(VARCHAR), Length(100,true), Default()
    *  @param readNum Database column read_num SqlType(INT), Default(0)
    *  @param commentNum Database column comment_num SqlType(INT), Default(0)
-   *  @param leval Database column leval SqlType(INT), Default(1)
+   *  @param level Database column level SqlType(INT), Default(None)
    *  @param createTime Database column create_time SqlType(BIGINT), Default(0)
    *  @param preference Database column preference SqlType(VARCHAR), Length(300,true), Default()
    *  @param token Database column token SqlType(VARCHAR), Length(300,true), Default()
-   *  @param userType Database column user_type SqlType(INT), Default(0) */
-  case class rUser(id: Long, nickname: String = "", mobile: String = "", email: String = "", username: String = "", password: String = "", sex: String = "", birthday: Long = 0L, pic: String = "", readNum: Int = 0, commentNum: Int = 0, leval: Int = 1, createTime: Long = 0L, preference: String = "", token: String = "", userType: Int = 0)
+   *  @param userType Database column user_type SqlType(INT), Default(0)
+   *  @param signature Database column signature SqlType(VARCHAR), Length(200,true), Default() */
+  case class rUser(id: Long, nickname: String = "", mobile: String = "", email: String = "", username: String = "", password: String = "", sex: String = "", birthday: Long = 0L, pic: String = "", readNum: Int = 0, commentNum: Int = 0, level: Option[Int] = None, createTime: Long = 0L, preference: String = "", token: String = "", userType: Int = 0, signature: String = "")
   /** GetResult implicit for fetching rUser objects using plain SQL queries */
-  implicit def GetResultrUser(implicit e0: GR[Long], e1: GR[String], e2: GR[Int]): GR[rUser] = GR{
+  implicit def GetResultrUser(implicit e0: GR[Long], e1: GR[String], e2: GR[Int], e3: GR[Option[Int]]): GR[rUser] = GR{
     prs => import prs._
-    rUser.tupled((<<[Long], <<[String], <<[String], <<[String], <<[String], <<[String], <<[String], <<[Long], <<[String], <<[Int], <<[Int], <<[Int], <<[Long], <<[String], <<[String], <<[Int]))
+    rUser.tupled((<<[Long], <<[String], <<[String], <<[String], <<[String], <<[String], <<[String], <<[Long], <<[String], <<[Int], <<[Int], <<?[Int], <<[Long], <<[String], <<[String], <<[Int], <<[String]))
   }
   /** Table description of table user. Objects of this class serve as prototypes for rows in queries. */
   class tUser(_tableTag: Tag) extends Table[rUser](_tableTag, "user") {
-    def * = (id, nickname, mobile, email, username, password, sex, birthday, pic, readNum, commentNum, leval, createTime, preference, token, userType) <> (rUser.tupled, rUser.unapply)
+    def * = (id, nickname, mobile, email, username, password, sex, birthday, pic, readNum, commentNum, level, createTime, preference, token, userType, signature) <> (rUser.tupled, rUser.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(id), Rep.Some(nickname), Rep.Some(mobile), Rep.Some(email), Rep.Some(username), Rep.Some(password), Rep.Some(sex), Rep.Some(birthday), Rep.Some(pic), Rep.Some(readNum), Rep.Some(commentNum), Rep.Some(leval), Rep.Some(createTime), Rep.Some(preference), Rep.Some(token), Rep.Some(userType)).shaped.<>({r=>import r._; _1.map(_=> rUser.tupled((_1.get, _2.get, _3.get, _4.get, _5.get, _6.get, _7.get, _8.get, _9.get, _10.get, _11.get, _12.get, _13.get, _14.get, _15.get, _16.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(id), Rep.Some(nickname), Rep.Some(mobile), Rep.Some(email), Rep.Some(username), Rep.Some(password), Rep.Some(sex), Rep.Some(birthday), Rep.Some(pic), Rep.Some(readNum), Rep.Some(commentNum), level, Rep.Some(createTime), Rep.Some(preference), Rep.Some(token), Rep.Some(userType), Rep.Some(signature)).shaped.<>({r=>import r._; _1.map(_=> rUser.tupled((_1.get, _2.get, _3.get, _4.get, _5.get, _6.get, _7.get, _8.get, _9.get, _10.get, _11.get, _12, _13.get, _14.get, _15.get, _16.get, _17.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column id SqlType(BIGINT), AutoInc, PrimaryKey */
     val id: Rep[Long] = column[Long]("id", O.AutoInc, O.PrimaryKey)
@@ -316,8 +317,8 @@ trait SlickTables {
     val readNum: Rep[Int] = column[Int]("read_num", O.Default(0))
     /** Database column comment_num SqlType(INT), Default(0) */
     val commentNum: Rep[Int] = column[Int]("comment_num", O.Default(0))
-    /** Database column leval SqlType(INT), Default(1) */
-    val leval: Rep[Int] = column[Int]("leval", O.Default(1))
+    /** Database column level SqlType(INT), Default(None) */
+    val level: Rep[Option[Int]] = column[Option[Int]]("level", O.Default(None))
     /** Database column create_time SqlType(BIGINT), Default(0) */
     val createTime: Rep[Long] = column[Long]("create_time", O.Default(0L))
     /** Database column preference SqlType(VARCHAR), Length(300,true), Default() */
@@ -326,6 +327,8 @@ trait SlickTables {
     val token: Rep[String] = column[String]("token", O.Length(300,varying=true), O.Default(""))
     /** Database column user_type SqlType(INT), Default(0) */
     val userType: Rep[Int] = column[Int]("user_type", O.Default(0))
+    /** Database column signature SqlType(VARCHAR), Length(200,true), Default() */
+    val signature: Rep[String] = column[String]("signature", O.Length(200,varying=true), O.Default(""))
   }
   /** Collection-like TableQuery object for table tUser */
   lazy val tUser = new TableQuery(tag => new tUser(tag))

@@ -114,6 +114,7 @@ class UserController @Inject()(
         val sex = (json \ "sex").as[String]
         val birthday = (json \ "birthday").as[Long]
         val pic = (json \ "pic").as[String]
+        val signature = (json \ "signature").as[String]
         userDAO.getUserById(userId.toLong).flatMap {
           case Some(user) =>
             val u = SlickTables.rUser(
@@ -128,9 +129,10 @@ class UserController @Inject()(
               pic,
               user.readNum,
               user.commentNum,
-              user.leval,
+              user.level,
               user.createTime,
-              user.preference
+              user.preference,
+              signature
             )
             userDAO.modifyUserInfo(u).map {
               case Success(_) =>

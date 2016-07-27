@@ -56,8 +56,9 @@ trait JsonProtocols {
       "pic"->obj.pic,
       "readNum"->obj.readNum,
       "commentNum"->obj.commentNum,
-      "leval"->obj.leval,
-      "preference"->obj.preference
+      "leval"->obj.level,
+      "preference"->obj.preference,
+      "signature"->obj.signature
       )
     }
   }

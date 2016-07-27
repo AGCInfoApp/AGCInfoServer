@@ -51,7 +51,8 @@ the server of AGCInfoApp create on 2016.7.25
     "readNum": 0,
     "commentNum": 0,
     "leval": 1,
-    "preference": ""
+    "preference": "",
+    "signature":""
   }
 }
 
@@ -68,7 +69,8 @@ the server of AGCInfoApp create on 2016.7.25
     "username": "test",
     "sex": "ÄÐ",
     "birthday": 0,
-    "pic": ""
+    "pic": "",
+    "signature":""
 }
 
 ·µ»Ø

@@ -15,7 +15,7 @@ trait SlickTables {
   import slick.jdbc.{GetResult => GR}
 
   /** DDL for all tables. Call .create to execute. */
-  lazy val schema: profile.SchemaDescription = Array(tCollection.schema, tComment.schema, tFriend.schema, tMoment.schema, tMomentComment.schema, tReadingRecord.schema, tUser.schema).reduceLeft(_ ++ _)
+  lazy val schema: profile.SchemaDescription = Array(tCollection.schema, tFriend.schema, tMoment.schema, tMomentComment.schema, tMomentVote.schema, tNews.schema, tNewsComment.schema, tReadingRecord.schema, tUser.schema).reduceLeft(_ ++ _)
   @deprecated("Use .schema instead of .ddl", "3.0")
   def ddl = schema
 
@@ -56,47 +56,6 @@ trait SlickTables {
   }
   /** Collection-like TableQuery object for table tCollection */
   lazy val tCollection = new TableQuery(tag => new tCollection(tag))
-
-  /** Entity class storing rows of table tComment
-   *  @param id Database column id SqlType(BIGINT), AutoInc, PrimaryKey
-   *  @param userid Database column userid SqlType(BIGINT), Default(0)
-   *  @param userName Database column user_name SqlType(VARCHAR), Length(50,true), Default()
-   *  @param userPic Database column user_pic SqlType(VARCHAR), Length(300,true), Default()
-   *  @param newsId Database column news_id SqlType(BIGINT)
-   *  @param content Database column content SqlType(VARCHAR), Length(3000,true), Default()
-   *  @param reId Database column re_id SqlType(BIGINT), Default(0)
-   *  @param createTime Database column create_time SqlType(BIGINT), Default(0) */
-  case class rComment(id: Long, userid: Long = 0L, userName: String = "", userPic: String = "", newsId: Long, content: String = "", reId: Long = 0L, createTime: Long = 0L)
-  /** GetResult implicit for fetching rComment objects using plain SQL queries */
-  implicit def GetResultrComment(implicit e0: GR[Long], e1: GR[String]): GR[rComment] = GR{
-    prs => import prs._
-    rComment.tupled((<<[Long], <<[Long], <<[String], <<[String], <<[Long], <<[String], <<[Long], <<[Long]))
-  }
-  /** Table description of table comment. Objects of this class serve as prototypes for rows in queries. */
-  class tComment(_tableTag: Tag) extends Table[rComment](_tableTag, "comment") {
-    def * = (id, userid, userName, userPic, newsId, content, reId, createTime) <> (rComment.tupled, rComment.unapply)
-    /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(id), Rep.Some(userid), Rep.Some(userName), Rep.Some(userPic), Rep.Some(newsId), Rep.Some(content), Rep.Some(reId), Rep.Some(createTime)).shaped.<>({r=>import r._; _1.map(_=> rComment.tupled((_1.get, _2.get, _3.get, _4.get, _5.get, _6.get, _7.get, _8.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
-
-    /** Database column id SqlType(BIGINT), AutoInc, PrimaryKey */
-    val id: Rep[Long] = column[Long]("id", O.AutoInc, O.PrimaryKey)
-    /** Database column userid SqlType(BIGINT), Default(0) */
-    val userid: Rep[Long] = column[Long]("userid", O.Default(0L))
-    /** Database column user_name SqlType(VARCHAR), Length(50,true), Default() */
-    val userName: Rep[String] = column[String]("user_name", O.Length(50,varying=true), O.Default(""))
-    /** Database column user_pic SqlType(VARCHAR), Length(300,true), Default() */
-    val userPic: Rep[String] = column[String]("user_pic", O.Length(300,varying=true), O.Default(""))
-    /** Database column news_id SqlType(BIGINT) */
-    val newsId: Rep[Long] = column[Long]("news_id")
-    /** Database column content SqlType(VARCHAR), Length(3000,true), Default() */
-    val content: Rep[String] = column[String]("content", O.Length(3000,varying=true), O.Default(""))
-    /** Database column re_id SqlType(BIGINT), Default(0) */
-    val reId: Rep[Long] = column[Long]("re_id", O.Default(0L))
-    /** Database column create_time SqlType(BIGINT), Default(0) */
-    val createTime: Rep[Long] = column[Long]("create_time", O.Default(0L))
-  }
-  /** Collection-like TableQuery object for table tComment */
-  lazy val tComment = new TableQuery(tag => new tComment(tag))
 
   /** Entity class storing rows of table tFriend
    *  @param id Database column id SqlType(BIGINT), AutoInc, PrimaryKey
@@ -184,24 +143,20 @@ trait SlickTables {
    *  @param id Database column id SqlType(BIGINT), AutoInc, PrimaryKey
    *  @param momentId Database column moment_id SqlType(BIGINT), Default(0)
    *  @param userid Database column userid SqlType(BIGINT), Default(0)
-   *  @param userName Database column user_name SqlType(VARCHAR), Length(50,true), Default()
-   *  @param userPic Database column user_pic SqlType(VARCHAR), Length(300,true), Default()
-   *  @param commentType Database column comment_type SqlType(INT), Default(0)
    *  @param commentContent Database column comment_content SqlType(VARCHAR), Length(2000,true), Default()
    *  @param reUid Database column re_uid SqlType(BIGINT), Default(0)
-   *  @param reUname Database column re_uname SqlType(VARCHAR), Length(100,true), Default()
    *  @param createTime Database column create_time SqlType(BIGINT), Default(0) */
-  case class rMomentComment(id: Long, momentId: Long = 0L, userid: Long = 0L, userName: String = "", userPic: String = "", commentType: Int = 0, commentContent: String = "", reUid: Long = 0L, reUname: String = "", createTime: Long = 0L)
+  case class rMomentComment(id: Long, momentId: Long = 0L, userid: Long = 0L, commentContent: String = "", reUid: Long = 0L, createTime: Long = 0L)
   /** GetResult implicit for fetching rMomentComment objects using plain SQL queries */
-  implicit def GetResultrMomentComment(implicit e0: GR[Long], e1: GR[String], e2: GR[Int]): GR[rMomentComment] = GR{
+  implicit def GetResultrMomentComment(implicit e0: GR[Long], e1: GR[String]): GR[rMomentComment] = GR{
     prs => import prs._
-    rMomentComment.tupled((<<[Long], <<[Long], <<[Long], <<[String], <<[String], <<[Int], <<[String], <<[Long], <<[String], <<[Long]))
+    rMomentComment.tupled((<<[Long], <<[Long], <<[Long], <<[String], <<[Long], <<[Long]))
   }
   /** Table description of table moment_comment. Objects of this class serve as prototypes for rows in queries. */
   class tMomentComment(_tableTag: Tag) extends Table[rMomentComment](_tableTag, "moment_comment") {
-    def * = (id, momentId, userid, userName, userPic, commentType, commentContent, reUid, reUname, createTime) <> (rMomentComment.tupled, rMomentComment.unapply)
+    def * = (id, momentId, userid, commentContent, reUid, createTime) <> (rMomentComment.tupled, rMomentComment.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(id), Rep.Some(momentId), Rep.Some(userid), Rep.Some(userName), Rep.Some(userPic), Rep.Some(commentType), Rep.Some(commentContent), Rep.Some(reUid), Rep.Some(reUname), Rep.Some(createTime)).shaped.<>({r=>import r._; _1.map(_=> rMomentComment.tupled((_1.get, _2.get, _3.get, _4.get, _5.get, _6.get, _7.get, _8.get, _9.get, _10.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(id), Rep.Some(momentId), Rep.Some(userid), Rep.Some(commentContent), Rep.Some(reUid), Rep.Some(createTime)).shaped.<>({r=>import r._; _1.map(_=> rMomentComment.tupled((_1.get, _2.get, _3.get, _4.get, _5.get, _6.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column id SqlType(BIGINT), AutoInc, PrimaryKey */
     val id: Rep[Long] = column[Long]("id", O.AutoInc, O.PrimaryKey)
@@ -209,23 +164,159 @@ trait SlickTables {
     val momentId: Rep[Long] = column[Long]("moment_id", O.Default(0L))
     /** Database column userid SqlType(BIGINT), Default(0) */
     val userid: Rep[Long] = column[Long]("userid", O.Default(0L))
-    /** Database column user_name SqlType(VARCHAR), Length(50,true), Default() */
-    val userName: Rep[String] = column[String]("user_name", O.Length(50,varying=true), O.Default(""))
-    /** Database column user_pic SqlType(VARCHAR), Length(300,true), Default() */
-    val userPic: Rep[String] = column[String]("user_pic", O.Length(300,varying=true), O.Default(""))
-    /** Database column comment_type SqlType(INT), Default(0) */
-    val commentType: Rep[Int] = column[Int]("comment_type", O.Default(0))
     /** Database column comment_content SqlType(VARCHAR), Length(2000,true), Default() */
     val commentContent: Rep[String] = column[String]("comment_content", O.Length(2000,varying=true), O.Default(""))
     /** Database column re_uid SqlType(BIGINT), Default(0) */
     val reUid: Rep[Long] = column[Long]("re_uid", O.Default(0L))
-    /** Database column re_uname SqlType(VARCHAR), Length(100,true), Default() */
-    val reUname: Rep[String] = column[String]("re_uname", O.Length(100,varying=true), O.Default(""))
     /** Database column create_time SqlType(BIGINT), Default(0) */
     val createTime: Rep[Long] = column[Long]("create_time", O.Default(0L))
   }
   /** Collection-like TableQuery object for table tMomentComment */
   lazy val tMomentComment = new TableQuery(tag => new tMomentComment(tag))
+
+  /** Entity class storing rows of table tMomentVote
+   *  @param id Database column id SqlType(BIGINT), AutoInc, PrimaryKey
+   *  @param momentId Database column moment_id SqlType(BIGINT), Default(0)
+   *  @param userid Database column userid SqlType(BIGINT), Default(0)
+   *  @param userName Database column user_name SqlType(VARCHAR), Length(200,true), Default()
+   *  @param userPic Database column user_pic SqlType(VARCHAR), Length(2000,true), Default()
+   *  @param createTime Database column create_time SqlType(BIGINT), Default(0) */
+  case class rMomentVote(id: Long, momentId: Long = 0L, userid: Long = 0L, userName: String = "", userPic: String = "", createTime: Long = 0L)
+  /** GetResult implicit for fetching rMomentVote objects using plain SQL queries */
+  implicit def GetResultrMomentVote(implicit e0: GR[Long], e1: GR[String]): GR[rMomentVote] = GR{
+    prs => import prs._
+    rMomentVote.tupled((<<[Long], <<[Long], <<[Long], <<[String], <<[String], <<[Long]))
+  }
+  /** Table description of table moment_vote. Objects of this class serve as prototypes for rows in queries. */
+  class tMomentVote(_tableTag: Tag) extends Table[rMomentVote](_tableTag, "moment_vote") {
+    def * = (id, momentId, userid, userName, userPic, createTime) <> (rMomentVote.tupled, rMomentVote.unapply)
+    /** Maps whole row to an option. Useful for outer joins. */
+    def ? = (Rep.Some(id), Rep.Some(momentId), Rep.Some(userid), Rep.Some(userName), Rep.Some(userPic), Rep.Some(createTime)).shaped.<>({r=>import r._; _1.map(_=> rMomentVote.tupled((_1.get, _2.get, _3.get, _4.get, _5.get, _6.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+
+    /** Database column id SqlType(BIGINT), AutoInc, PrimaryKey */
+    val id: Rep[Long] = column[Long]("id", O.AutoInc, O.PrimaryKey)
+    /** Database column moment_id SqlType(BIGINT), Default(0) */
+    val momentId: Rep[Long] = column[Long]("moment_id", O.Default(0L))
+    /** Database column userid SqlType(BIGINT), Default(0) */
+    val userid: Rep[Long] = column[Long]("userid", O.Default(0L))
+    /** Database column user_name SqlType(VARCHAR), Length(200,true), Default() */
+    val userName: Rep[String] = column[String]("user_name", O.Length(200,varying=true), O.Default(""))
+    /** Database column user_pic SqlType(VARCHAR), Length(2000,true), Default() */
+    val userPic: Rep[String] = column[String]("user_pic", O.Length(2000,varying=true), O.Default(""))
+    /** Database column create_time SqlType(BIGINT), Default(0) */
+    val createTime: Rep[Long] = column[Long]("create_time", O.Default(0L))
+  }
+  /** Collection-like TableQuery object for table tMomentVote */
+  lazy val tMomentVote = new TableQuery(tag => new tMomentVote(tag))
+
+  /** Entity class storing rows of table tNews
+   *  @param id Database column id SqlType(BIGINT), AutoInc, PrimaryKey
+   *  @param title Database column title SqlType(VARCHAR), Length(50,true), Default()
+   *  @param author Database column author SqlType(VARCHAR), Length(30,true), Default()
+   *  @param source Database column source SqlType(VARCHAR), Length(255,true), Default()
+   *  @param thumbnail Database column thumbnail SqlType(VARCHAR), Length(300,true), Default()
+   *  @param description Database column description SqlType(VARCHAR), Length(300,true), Default()
+   *  @param createTime Database column create_time SqlType(BIGINT)
+   *  @param content Database column content SqlType(VARCHAR), Length(17000,true), Default()
+   *  @param picUrls Database column pic_urls SqlType(VARCHAR), Length(1000,true), Default()
+   *  @param barcode Database column barcode SqlType(VARCHAR), Length(300,true), Default()
+   *  @param introduce Database column introduce SqlType(VARCHAR), Length(300,true), Default()
+   *  @param cateId Database column cate_id SqlType(INT), Default(0)
+   *  @param category Database column category SqlType(VARCHAR), Length(30,true), Default()
+   *  @param url Database column url SqlType(VARCHAR), Length(300,true), Default()
+   *  @param tags Database column tags SqlType(VARCHAR), Length(300,true), Default()
+   *  @param relationNews Database column relation_news SqlType(VARCHAR), Length(300,true), Default()
+   *  @param other Database column other SqlType(VARCHAR), Length(500,true), Default() */
+  case class rNews(id: Long, title: String = "", author: String = "", source: String = "", thumbnail: String = "", description: String = "", createTime: Long, content: String = "", picUrls: String = "", barcode: String = "", introduce: String = "", cateId: Int = 0, category: String = "", url: String = "", tags: String = "", relationNews: String = "", other: String = "")
+  /** GetResult implicit for fetching rNews objects using plain SQL queries */
+  implicit def GetResultrNews(implicit e0: GR[Long], e1: GR[String], e2: GR[Int]): GR[rNews] = GR{
+    prs => import prs._
+    rNews.tupled((<<[Long], <<[String], <<[String], <<[String], <<[String], <<[String], <<[Long], <<[String], <<[String], <<[String], <<[String], <<[Int], <<[String], <<[String], <<[String], <<[String], <<[String]))
+  }
+  /** Table description of table news. Objects of this class serve as prototypes for rows in queries. */
+  class tNews(_tableTag: Tag) extends Table[rNews](_tableTag, "news") {
+    def * = (id, title, author, source, thumbnail, description, createTime, content, picUrls, barcode, introduce, cateId, category, url, tags, relationNews, other) <> (rNews.tupled, rNews.unapply)
+    /** Maps whole row to an option. Useful for outer joins. */
+    def ? = (Rep.Some(id), Rep.Some(title), Rep.Some(author), Rep.Some(source), Rep.Some(thumbnail), Rep.Some(description), Rep.Some(createTime), Rep.Some(content), Rep.Some(picUrls), Rep.Some(barcode), Rep.Some(introduce), Rep.Some(cateId), Rep.Some(category), Rep.Some(url), Rep.Some(tags), Rep.Some(relationNews), Rep.Some(other)).shaped.<>({r=>import r._; _1.map(_=> rNews.tupled((_1.get, _2.get, _3.get, _4.get, _5.get, _6.get, _7.get, _8.get, _9.get, _10.get, _11.get, _12.get, _13.get, _14.get, _15.get, _16.get, _17.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+
+    /** Database column id SqlType(BIGINT), AutoInc, PrimaryKey */
+    val id: Rep[Long] = column[Long]("id", O.AutoInc, O.PrimaryKey)
+    /** Database column title SqlType(VARCHAR), Length(50,true), Default() */
+    val title: Rep[String] = column[String]("title", O.Length(50,varying=true), O.Default(""))
+    /** Database column author SqlType(VARCHAR), Length(30,true), Default() */
+    val author: Rep[String] = column[String]("author", O.Length(30,varying=true), O.Default(""))
+    /** Database column source SqlType(VARCHAR), Length(255,true), Default() */
+    val source: Rep[String] = column[String]("source", O.Length(255,varying=true), O.Default(""))
+    /** Database column thumbnail SqlType(VARCHAR), Length(300,true), Default() */
+    val thumbnail: Rep[String] = column[String]("thumbnail", O.Length(300,varying=true), O.Default(""))
+    /** Database column description SqlType(VARCHAR), Length(300,true), Default() */
+    val description: Rep[String] = column[String]("description", O.Length(300,varying=true), O.Default(""))
+    /** Database column create_time SqlType(BIGINT) */
+    val createTime: Rep[Long] = column[Long]("create_time")
+    /** Database column content SqlType(VARCHAR), Length(17000,true), Default() */
+    val content: Rep[String] = column[String]("content", O.Length(17000,varying=true), O.Default(""))
+    /** Database column pic_urls SqlType(VARCHAR), Length(1000,true), Default() */
+    val picUrls: Rep[String] = column[String]("pic_urls", O.Length(1000,varying=true), O.Default(""))
+    /** Database column barcode SqlType(VARCHAR), Length(300,true), Default() */
+    val barcode: Rep[String] = column[String]("barcode", O.Length(300,varying=true), O.Default(""))
+    /** Database column introduce SqlType(VARCHAR), Length(300,true), Default() */
+    val introduce: Rep[String] = column[String]("introduce", O.Length(300,varying=true), O.Default(""))
+    /** Database column cate_id SqlType(INT), Default(0) */
+    val cateId: Rep[Int] = column[Int]("cate_id", O.Default(0))
+    /** Database column category SqlType(VARCHAR), Length(30,true), Default() */
+    val category: Rep[String] = column[String]("category", O.Length(30,varying=true), O.Default(""))
+    /** Database column url SqlType(VARCHAR), Length(300,true), Default() */
+    val url: Rep[String] = column[String]("url", O.Length(300,varying=true), O.Default(""))
+    /** Database column tags SqlType(VARCHAR), Length(300,true), Default() */
+    val tags: Rep[String] = column[String]("tags", O.Length(300,varying=true), O.Default(""))
+    /** Database column relation_news SqlType(VARCHAR), Length(300,true), Default() */
+    val relationNews: Rep[String] = column[String]("relation_news", O.Length(300,varying=true), O.Default(""))
+    /** Database column other SqlType(VARCHAR), Length(500,true), Default() */
+    val other: Rep[String] = column[String]("other", O.Length(500,varying=true), O.Default(""))
+  }
+  /** Collection-like TableQuery object for table tNews */
+  lazy val tNews = new TableQuery(tag => new tNews(tag))
+
+  /** Entity class storing rows of table tNewsComment
+   *  @param id Database column id SqlType(BIGINT), AutoInc, PrimaryKey
+   *  @param userid Database column userid SqlType(BIGINT), Default(0)
+   *  @param userName Database column user_name SqlType(VARCHAR), Length(50,true), Default()
+   *  @param userPic Database column user_pic SqlType(VARCHAR), Length(300,true), Default()
+   *  @param newsId Database column news_id SqlType(BIGINT)
+   *  @param content Database column content SqlType(VARCHAR), Length(3000,true), Default()
+   *  @param reId Database column re_id SqlType(BIGINT), Default(0)
+   *  @param createTime Database column create_time SqlType(BIGINT), Default(0) */
+  case class rNewsComment(id: Long, userid: Long = 0L, userName: String = "", userPic: String = "", newsId: Long, content: String = "", reId: Long = 0L, createTime: Long = 0L)
+  /** GetResult implicit for fetching rNewsComment objects using plain SQL queries */
+  implicit def GetResultrNewsComment(implicit e0: GR[Long], e1: GR[String]): GR[rNewsComment] = GR{
+    prs => import prs._
+    rNewsComment.tupled((<<[Long], <<[Long], <<[String], <<[String], <<[Long], <<[String], <<[Long], <<[Long]))
+  }
+  /** Table description of table news_comment. Objects of this class serve as prototypes for rows in queries. */
+  class tNewsComment(_tableTag: Tag) extends Table[rNewsComment](_tableTag, "news_comment") {
+    def * = (id, userid, userName, userPic, newsId, content, reId, createTime) <> (rNewsComment.tupled, rNewsComment.unapply)
+    /** Maps whole row to an option. Useful for outer joins. */
+    def ? = (Rep.Some(id), Rep.Some(userid), Rep.Some(userName), Rep.Some(userPic), Rep.Some(newsId), Rep.Some(content), Rep.Some(reId), Rep.Some(createTime)).shaped.<>({r=>import r._; _1.map(_=> rNewsComment.tupled((_1.get, _2.get, _3.get, _4.get, _5.get, _6.get, _7.get, _8.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+
+    /** Database column id SqlType(BIGINT), AutoInc, PrimaryKey */
+    val id: Rep[Long] = column[Long]("id", O.AutoInc, O.PrimaryKey)
+    /** Database column userid SqlType(BIGINT), Default(0) */
+    val userid: Rep[Long] = column[Long]("userid", O.Default(0L))
+    /** Database column user_name SqlType(VARCHAR), Length(50,true), Default() */
+    val userName: Rep[String] = column[String]("user_name", O.Length(50,varying=true), O.Default(""))
+    /** Database column user_pic SqlType(VARCHAR), Length(300,true), Default() */
+    val userPic: Rep[String] = column[String]("user_pic", O.Length(300,varying=true), O.Default(""))
+    /** Database column news_id SqlType(BIGINT) */
+    val newsId: Rep[Long] = column[Long]("news_id")
+    /** Database column content SqlType(VARCHAR), Length(3000,true), Default() */
+    val content: Rep[String] = column[String]("content", O.Length(3000,varying=true), O.Default(""))
+    /** Database column re_id SqlType(BIGINT), Default(0) */
+    val reId: Rep[Long] = column[Long]("re_id", O.Default(0L))
+    /** Database column create_time SqlType(BIGINT), Default(0) */
+    val createTime: Rep[Long] = column[Long]("create_time", O.Default(0L))
+  }
+  /** Collection-like TableQuery object for table tNewsComment */
+  lazy val tNewsComment = new TableQuery(tag => new tNewsComment(tag))
 
   /** Entity class storing rows of table tReadingRecord
    *  @param id Database column id SqlType(BIGINT), AutoInc, PrimaryKey

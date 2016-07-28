@@ -27,7 +27,7 @@ CREATE TABLE friend
   timestamp BIGINT DEFAULT 0 NOT NULL
 )ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-CREATE TABLE comment
+CREATE TABLE news_comment
 (
   id BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
   userid BIGINT NOT NULL DEFAULT 0,
@@ -81,35 +81,38 @@ CREATE TABLE moment_comment
   id BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
   moment_id BIGINT NOT NULL DEFAULT 0,
   userid BIGINT NOT NULL DEFAULT 0,
-  user_name VARCHAR(50) NOT NULL DEFAULT '',
-  user_pic VARCHAR(300) NOT NULL DEFAULT '',
-  comment_type INT NOT NULL DEFAULT 0,
   comment_content VARCHAR(2000) NOT NULL DEFAULT '',
   re_uid BIGINT NOT NULL DEFAULT 0,
-  re_uname VARCHAR(100) NOT NULL DEFAULT '',
+  create_time BIGINT DEFAULT 0 NOT NULL
+)ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+CREATE TABLE moment_vote
+(
+  id BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  moment_id BIGINT NOT NULL DEFAULT 0,
+  userid BIGINT NOT NULL DEFAULT 0,
+  user_name VARCHAR(200) NOT NULL DEFAULT '',
+  user_pic VARCHAR(2000) NOT NULL DEFAULT '',
   create_time BIGINT DEFAULT 0 NOT NULL
 )ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 
-
-
-
-
-
-CREATE TABLE `wangyi` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `title` varchar(50) NOT NULL DEFAULT '',
-  `author` varchar(30) NOT NULL DEFAULT '',
-  `source` varchar(255) NOT NULL DEFAULT '',
-  `thumbnail` varchar(300) NOT NULL DEFAULT '',
-  `description` varchar(300) NOT NULL DEFAULT '',
-  `create_time` bigint(20) NOT NULL,
-  `content` varchar(10000) NOT NULL DEFAULT '',
-  `pic_urls` varchar(1000) NOT NULL DEFAULT '',
-  `cate_id` int(11) NOT NULL DEFAULT '0',
-  `category` varchar(30) NOT NULL DEFAULT '',
-  `url` varchar(300) NOT NULL DEFAULT '',
-  `tags` varchar(300) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=128 DEFAULT CHARSET=utf8;
-
+CREATE TABLE news (
+  id BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  title varchar(50) NOT NULL DEFAULT '',
+  author varchar(30) NOT NULL DEFAULT '',
+  source varchar(255) NOT NULL DEFAULT '',
+  thumbnail varchar(300) NOT NULL DEFAULT '',
+  description varchar(300) NOT NULL DEFAULT '',
+  create_time bigint(20) NOT NULL,
+  content varchar(17000) NOT NULL DEFAULT '',
+  pic_urls varchar(1000) NOT NULL DEFAULT '',
+  barcode VARCHAR(300) NOT NULL DEFAULT '',
+  introduce VARCHAR(300) NOT NULL DEFAULT '',
+  cate_id int(11) NOT NULL DEFAULT 0,
+  category varchar(30) NOT NULL DEFAULT '',
+  url varchar(300) NOT NULL DEFAULT '',
+  tags varchar(300) NOT NULL DEFAULT '',
+  relation_news VARCHAR(300) NOT NULL DEFAULT '',
+  other VARCHAR(500) NOT NULL DEFAULT ''
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;

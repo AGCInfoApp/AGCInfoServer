@@ -27,4 +27,36 @@ class MomentDAO@Inject()(
       sortBy(_.createTime.desc).drop((page-1)*pageSize).take(pageSize).result)
   }
 
+  def getMomentComment(momentId:Long)={
+    db.run(comment.filter(_.momentId === momentId).result)
+  }
+
+  def getMomentVote(momentId:Long)={
+    db.run(comment.filter(_.momentId === momentId).result)
+  }
+
+  def createMoment(userId:Long,userName:String,userPic:String,newsId:Long,
+                   newsTitle:String,newsPic:String, message:String,pics:String,createTime:Long)={
+    val r = SlickTables.rMoment(
+      id = -1l,
+      userid = userId,
+      userName = userName,
+      userPic = userPic,
+      newsId = newsId,
+      newsTitle = newsTitle,
+      newsPic = newsPic,
+      message = message,
+      pics = pics,
+      createTime = createTime
+    )
+    db.run(moment returning moment.map(_.id)+=r )
+  }
+
+  def getMoment(momentId:Long)={
+    db.run(moment.filter(_.id === momentId).result.headOption)
+  }
+
+
+
+
 }

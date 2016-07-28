@@ -22,6 +22,8 @@ GET         /prometheus/user/getFriend               @controllers.UserController
 GET         /prometheus/user/getFans                 @controllers.UserController.getUserFans(userId:Long)
 GET         /prometheus/user/getOtherInfo            @controllers.UserController.getUserInfo(userId:Long)
 
+
+
 # routes for news
 #GET         /prometheus/news/listByCat               @controllers.NewsController.getNewsBySite(cateId:Int,page:Option[Int])
 #GET         /prometheus/news/getInfo                 @controllers.NewsController.getNewsInfo(cateId:Int,id:Long)

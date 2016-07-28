@@ -7,6 +7,8 @@ import play.api.cache.CacheApi
 import play.api.db.slick.{HasDatabaseConfigProvider, DatabaseConfigProvider}
 import slick.driver.JdbcProfile
 
+import scala.util.Success
+
 /**
  * Created by 王春泽 on 2016/7/26.
  */
@@ -54,7 +56,9 @@ class UserDAO @Inject()(
    * @return
    */
   def modifyUserInfo(user:SlickTables.rUser)={
-    db.run(User.insertOrUpdate(user).asTry)
+    db.run(User.insertOrUpdate(user).asTry).andThen{
+      case success => cache.remove(userCacheKey(user.id))
+    }
   }
 
 

@@ -2,7 +2,7 @@
 //
 //import com.google.inject.{Inject, Singleton}
 //import models.JsonProtocols
-//import models.dao.{RecordDAO, NewsDAO}
+//import models.dao.{NewsDAO}
 //import models.tables.SlickTables
 //import org.slf4j.LoggerFactory
 //import play.api.libs.json.Json
@@ -17,40 +17,11 @@
 //
 //@Singleton
 //class NewsController@Inject()(
-//  val newsDAO:NewsDAO,
-//  val recordDAO:RecordDAO
+//  val newsDAO:NewsDAO
 //  ) extends Controller with JsonProtocols {
 //
 //  private val logger = LoggerFactory.getLogger(this.getClass)
 //  private val pageSize=20  //每页显示的数量
-//
-//  /**
-//   * 获取新闻列表
-//   * @param cateId
-//   * @param page 分页页码
-//   * @return
-//   */
-//  def getNewsBySite(cateId:Int,page:Option[Int])=Action.async{implicit request=>
-//    val curPage=page.getOrElse(1)
-//    cateId match{
-//      case 2=>
-//        newsDAO.getNewsNum(cateId).flatMap {cnt=>
-//          val pageCnt = cnt / pageSize + (if(cnt % pageSize==0) 0 else 1)
-//          newsDAO.listLeifeng(curPage, pageSize).map { news =>
-//            val data = news.toList.sortBy(_.createTime).reverse
-//            Ok(successResult(Json.obj("curPage" -> curPage,"pageCnt"->pageCnt, "data" -> data)))
-//          }
-//        }
-//      case _=>
-//        newsDAO.getNewsNum(cateId).flatMap { cnt =>
-//          val pageCnt = cnt / pageSize + (if (cnt % pageSize == 0) 0 else 1)
-//          newsDAO.listWangyi(curPage, pageSize).map { news =>
-//            val data = news.toList.sortBy(_.createTime).reverse
-//            Ok(successResult(Json.obj("curPage" -> curPage,"pageCnt"->pageCnt, "data" -> data)))
-//          }
-//        }
-//    }
-//  }
 //
 //
 //
@@ -103,12 +74,7 @@
 //    }
 //  }
 //
-//  /**
-//   * 获取推荐新闻
-//   * @param cateId
-//   * @param id
-//   * @return
-//   */
+//
 //  def getRecommentNews(cateId:Int,id:Long)=Action.async{implicit request=>
 //    cateId match{
 //      case 2=>
@@ -157,11 +123,7 @@
 //    }
 //  }
 //
-//  /**
-//   * 搜索新闻
-//   * @param searchKey
-//   * @return
-//   */
+//
 //  def searchNews(searchKey:String)=Action.async{implicit request=>
 //    newsDAO.searchNews(searchKey).map{seq=>
 //      val data=seq.sortBy(_.createTime).reverse
@@ -169,10 +131,7 @@
 //    }
 //  }
 //
-//  /**
-//   * 获取最近热词
-//   * @return
-//   */
+//
 //  def getRecentKeyword=Action.async{implicit request=>
 //    newsDAO.getKeyword().map{res=>
 //      val keyword=res.flatMap{tags=>
@@ -186,7 +145,7 @@
 //
 //
 //
-//  /*** Admin 操作 ***/
+//
 //  def deleteNews(cateId:Int,newsId:Long)=Action.async{implicit request=>
 ////    request.session.get(SessionKey.uType) match{
 //      Option("3") match {

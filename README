@@ -142,10 +142,69 @@ the server of AGCInfoApp create on 2016.7.25
   }
 }
 
+9、搜索人 prometheus/user/searchUser?searchKey=1
+GET
+返回
+{
+  "errCode": 0,
+  "msg": "ok",
+  "data": [
+    {
+      "userId": 1,
+      "nickname": "你大爷",
+      "sex": "男",
+      "pic": ""
+    }
+  ]
+}
 
+==========动态相关接口===========
+1、创建动态 /prometheus/moment/createMoment
+POST
+{
+    "userId":1,
+    "token":"",
+    "newsId":0, --字段可选 不创建该项时为0 或者不传该字段
+    "message":"我的动态", --字段可选 不创建该项时为"" 或者不传该字段
+    "pics":["aaa.png","bbb.png"] --字段可选 不创建该项时为[""] 或者不传该字段
+}
 
-
-
+2、动态列表 prometheus/moment/listMoment
+GET
+{
+  "errCode": 0,
+  "msg": "ok",
+  "data": [
+    {
+      "id": 30,
+      "userid": 1,
+      "userName": "你大爷",
+      "userPic": "",  --用户头像
+      "newsId": 0,    --新闻id
+      "newsTitle": "", --新闻标题
+      "newsPic": "",   --新闻图片
+      "newsDesc": "aaa.png#bbb.png", --新闻描述
+      "message": "",  --发表的内容
+      "createTime": 1469811167457, --时间
+      "vote": [
+        {
+      "userId"->2,
+      "userName"->"",
+      "userPic"->""
+        }
+      ],  --点赞
+      "comment": [
+      {
+        "userId"->2,
+        "userName"->"",
+        "userPic"->"",
+        "content"->"", -- 评论内容
+        "reId"->""  --回复给某人 被回复人的id
+      }
+      ]  --评论
+    }
+  ]
+}
 
 
 

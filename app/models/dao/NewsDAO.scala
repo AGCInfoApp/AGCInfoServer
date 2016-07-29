@@ -27,12 +27,12 @@ class NewsDAO @Inject()(
   private val news = SlickTables.tNews
 
 
-  def listnews(cateId:Int,curPage: Int, pageSize: Int) = {
+  def listNews(cateId:Int,curPage: Int, pageSize: Int) = {
     db.run(news.filter(_.cateId === cateId).sortBy(_.createTime.desc).drop((curPage - 1) * pageSize).
       take(pageSize).result)
   }
 
-  def getnewsById(id: Long) = {
+  def getNewsById(id: Long) = {
     db.run(news.filter(_.id === id).result.headOption)
   }
 
@@ -41,7 +41,7 @@ class NewsDAO @Inject()(
   }
 
 
-  def getRecommentnewsNews(tagList: List[String], source: String) = {
+  def getRecommentNews(tagList: List[String], source: String) = {
     Future.sequence(tagList.map { tag =>
       db.run(news.filter(w => (w.description like ("%" + tag + "%")) || (w.source === source)).result)
     })

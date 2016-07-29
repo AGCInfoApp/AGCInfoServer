@@ -21,6 +21,10 @@ POST        /prometheus/user/followOther             @controllers.UserController
 GET         /prometheus/user/getFriend               @controllers.UserController.getUserFriend(userId:Long)
 GET         /prometheus/user/getFans                 @controllers.UserController.getUserFans(userId:Long)
 GET         /prometheus/user/getOtherInfo            @controllers.UserController.getUserInfo(userId:Long)
+GET         /prometheus/user/searchUser              @controllers.UserController.searchUser(searchKey:String)
+
+POST        /prometheus/moment/createMoment          @controllers.Moment.createMoment
+GET         /prometheus/moment/listMoment            @controllers.Moment.listMoment(userId:Long,page:Int,pageSize:Option[Int])
 
 
 

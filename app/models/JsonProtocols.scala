@@ -29,6 +29,8 @@ trait JsonProtocols {
     val deleteFailed = jsonResult(1000302,"failed to delete the news!")
 
     val commentCreateFailed=jsonResult(1000401,"create comments failed!")
+
+    val momentCreateFailed = jsonResult(1000501,"创建失败！请稍后重试")
   }
 
 

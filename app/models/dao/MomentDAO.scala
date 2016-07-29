@@ -21,8 +21,9 @@ class MomentDAO@Inject()(
 
   private val moment = SlickTables.tMoment
   private val comment = SlickTables.tMomentComment
+  private val vote = SlickTables.tMomentVote
 
-  def getMoment(userId:Long,page:Int,pageSize:Int)={
+  def listMoment(userId:Long,page:Int,pageSize:Int)={
     db.run(moment.filter(_.userid===userId).
       sortBy(_.createTime.desc).drop((page-1)*pageSize).take(pageSize).result)
   }
@@ -32,11 +33,12 @@ class MomentDAO@Inject()(
   }
 
   def getMomentVote(momentId:Long)={
-    db.run(comment.filter(_.momentId === momentId).result)
+    db.run(vote.filter(_.momentId === momentId).result)
   }
 
   def createMoment(userId:Long,userName:String,userPic:String,newsId:Long,
-                   newsTitle:String,newsPic:String, message:String,pics:String,createTime:Long)={
+                   newsTitle:String,newsPic:String,newsDesc:String, message:String,pics:String,
+                   createTime:Long)={
     val r = SlickTables.rMoment(
       id = -1l,
       userid = userId,
@@ -45,11 +47,12 @@ class MomentDAO@Inject()(
       newsId = newsId,
       newsTitle = newsTitle,
       newsPic = newsPic,
+      newsDesc = newsDesc,
       message = message,
       pics = pics,
       createTime = createTime
     )
-    db.run(moment returning moment.map(_.id)+=r )
+    db.run(moment returning moment.map(_.id)+=r ).mapTo[Long]
   }
 
   def getMoment(momentId:Long)={

@@ -123,6 +123,13 @@ class UserDAO @Inject()(
   }
 
 
+  def searchUser(searchKey:String)={
+    db.run(User.filter(t=>
+      t.mobile === searchKey ||
+      t.email === searchKey ||
+      t.username === searchKey
+    ).result)
+  }
 
 
 

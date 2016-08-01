@@ -25,11 +25,13 @@ class NewsDAO @Inject()(
   private val log = LoggerFactory.getLogger(this.getClass)
 
   private val news = SlickTables.tNews
+  private val newsComment = SlickTables.tNewsComment
 
 
   def listNews(cateId:Int,curPage: Int, pageSize: Int) = {
     db.run(news.filter(_.cateId === cateId).sortBy(_.createTime.desc).drop((curPage - 1) * pageSize).
-      take(pageSize).result)
+      take(pageSize).map(t=>(t.id,t.cateId,t.title,t.description,t.thumbnail,
+      t.createTime,t.url)).result)
   }
 
   def getNewsById(id: Long) = {
@@ -49,6 +51,12 @@ class NewsDAO @Inject()(
 
   def updateNewsRelation(id: Long, relation: String) = {
     db.run(news.filter(_.id === id).map(_.relationNews).update(relation))
+  }
+
+
+
+  def getNewsCommentNum(newsId:Long)={
+    db.run(newsComment.filter(_.newsId===newsId).size.result)
   }
 
 

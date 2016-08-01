@@ -113,6 +113,8 @@ CREATE TABLE news (
   category varchar(30) NOT NULL DEFAULT '',
   url varchar(300) NOT NULL DEFAULT '',
   tags varchar(300) NOT NULL DEFAULT '',
+  read_num INT NOT NULL DEFAULT 0,
+  comment_num INT NOT NULL DEFAULT 0,
   relation_news VARCHAR(300) NOT NULL DEFAULT '',
   other VARCHAR(500) NOT NULL DEFAULT ''
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;

@@ -169,8 +169,9 @@ POST
     "pics":["aaa.png","bbb.png"] --字段可选 不创建该项时为[""] 或者不传该字段
 }
 
-2、动态列表 prometheus/moment/listMoment
-GET
+2、动态列表 prometheus/moment/listMoment?userId=1&page=1&pageSize=10
+GET   pageSize可选
+返回
 {
   "errCode": 0,
   "msg": "ok",

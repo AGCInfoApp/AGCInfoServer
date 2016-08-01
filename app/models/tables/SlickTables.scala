@@ -225,19 +225,21 @@ trait SlickTables {
    *  @param category Database column category SqlType(VARCHAR), Length(30,true), Default()
    *  @param url Database column url SqlType(VARCHAR), Length(300,true), Default()
    *  @param tags Database column tags SqlType(VARCHAR), Length(300,true), Default()
+   *  @param readNum Database column read_num SqlType(INT), Default(0)
+   *  @param commentNum Database column comment_num SqlType(INT), Default(0)
    *  @param relationNews Database column relation_news SqlType(VARCHAR), Length(300,true), Default()
    *  @param other Database column other SqlType(VARCHAR), Length(500,true), Default() */
-  case class rNews(id: Long, title: String = "", author: String = "", source: String = "", thumbnail: String = "", description: String = "", createTime: Long, content: String = "", picUrls: String = "", barcode: String = "", introduce: String = "", cateId: Int = 0, category: String = "", url: String = "", tags: String = "", relationNews: String = "", other: String = "")
+  case class rNews(id: Long, title: String = "", author: String = "", source: String = "", thumbnail: String = "", description: String = "", createTime: Long, content: String = "", picUrls: String = "", barcode: String = "", introduce: String = "", cateId: Int = 0, category: String = "", url: String = "", tags: String = "", readNum: Int = 0, commentNum: Int = 0, relationNews: String = "", other: String = "")
   /** GetResult implicit for fetching rNews objects using plain SQL queries */
   implicit def GetResultrNews(implicit e0: GR[Long], e1: GR[String], e2: GR[Int]): GR[rNews] = GR{
     prs => import prs._
-    rNews.tupled((<<[Long], <<[String], <<[String], <<[String], <<[String], <<[String], <<[Long], <<[String], <<[String], <<[String], <<[String], <<[Int], <<[String], <<[String], <<[String], <<[String], <<[String]))
+    rNews.tupled((<<[Long], <<[String], <<[String], <<[String], <<[String], <<[String], <<[Long], <<[String], <<[String], <<[String], <<[String], <<[Int], <<[String], <<[String], <<[String], <<[Int], <<[Int], <<[String], <<[String]))
   }
   /** Table description of table news. Objects of this class serve as prototypes for rows in queries. */
   class tNews(_tableTag: Tag) extends Table[rNews](_tableTag, "news") {
-    def * = (id, title, author, source, thumbnail, description, createTime, content, picUrls, barcode, introduce, cateId, category, url, tags, relationNews, other) <> (rNews.tupled, rNews.unapply)
+    def * = (id, title, author, source, thumbnail, description, createTime, content, picUrls, barcode, introduce, cateId, category, url, tags, readNum, commentNum, relationNews, other) <> (rNews.tupled, rNews.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(id), Rep.Some(title), Rep.Some(author), Rep.Some(source), Rep.Some(thumbnail), Rep.Some(description), Rep.Some(createTime), Rep.Some(content), Rep.Some(picUrls), Rep.Some(barcode), Rep.Some(introduce), Rep.Some(cateId), Rep.Some(category), Rep.Some(url), Rep.Some(tags), Rep.Some(relationNews), Rep.Some(other)).shaped.<>({r=>import r._; _1.map(_=> rNews.tupled((_1.get, _2.get, _3.get, _4.get, _5.get, _6.get, _7.get, _8.get, _9.get, _10.get, _11.get, _12.get, _13.get, _14.get, _15.get, _16.get, _17.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(id), Rep.Some(title), Rep.Some(author), Rep.Some(source), Rep.Some(thumbnail), Rep.Some(description), Rep.Some(createTime), Rep.Some(content), Rep.Some(picUrls), Rep.Some(barcode), Rep.Some(introduce), Rep.Some(cateId), Rep.Some(category), Rep.Some(url), Rep.Some(tags), Rep.Some(readNum), Rep.Some(commentNum), Rep.Some(relationNews), Rep.Some(other)).shaped.<>({r=>import r._; _1.map(_=> rNews.tupled((_1.get, _2.get, _3.get, _4.get, _5.get, _6.get, _7.get, _8.get, _9.get, _10.get, _11.get, _12.get, _13.get, _14.get, _15.get, _16.get, _17.get, _18.get, _19.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column id SqlType(BIGINT), AutoInc, PrimaryKey */
     val id: Rep[Long] = column[Long]("id", O.AutoInc, O.PrimaryKey)
@@ -269,6 +271,10 @@ trait SlickTables {
     val url: Rep[String] = column[String]("url", O.Length(300,varying=true), O.Default(""))
     /** Database column tags SqlType(VARCHAR), Length(300,true), Default() */
     val tags: Rep[String] = column[String]("tags", O.Length(300,varying=true), O.Default(""))
+    /** Database column read_num SqlType(INT), Default(0) */
+    val readNum: Rep[Int] = column[Int]("read_num", O.Default(0))
+    /** Database column comment_num SqlType(INT), Default(0) */
+    val commentNum: Rep[Int] = column[Int]("comment_num", O.Default(0))
     /** Database column relation_news SqlType(VARCHAR), Length(300,true), Default() */
     val relationNews: Rep[String] = column[String]("relation_news", O.Length(300,varying=true), O.Default(""))
     /** Database column other SqlType(VARCHAR), Length(500,true), Default() */

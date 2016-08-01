@@ -24,22 +24,36 @@
 //  private val pageSize=20  //每页显示的数量
 //
 //
-//
-//  def getNewsList(cateId:Int)=Action.async{implicit request=>
-//    newsDAO.getNewsList(cateId,1,20).map{res=>
-//      val a=res.map{
-//          case t:SlickTables.tWangyi=>
-//            print(t)
-//            val news=new newsObj()
-//            news.applyWangyi(t.asInstanceOf[SlickTables.rWangyi])
-//            news
-//          case _=>
-//            println("------")
-//            new newsObj()
+//  def listNews(cateId: Int, page: Int, pageSize: Option[Int]) =
+//    Action.async { implicit request =>
+//      val curPage = if (page < 1) 1 else page
+//      val curPageSize = pageSize.getOrElse(20)
+//      newsDAO.listNews(cateId, curPage, curPageSize).map { seq =>
+//        val data = seq.map { t =>
+//          Json.obj(
+//            "newsId" -> t._1,
+//            "cateId" -> t._2,
+//            "title" -> t._3,
+//            "description" -> t._4,
+//            "thumbnail" -> t._5,
+//            "createTime" -> t._6,
+//            "url" -> t._7
+//          )
+//        }
+//        Ok(successResult(Json.obj("data" -> data)))
 //      }
-//      Ok(successResult(Json.obj("data"->a)))
+//    }
+//
+//
+//  def getNewsInfo(newsId:Long,userId:Long)=Action.async{implicit request=>
+//    newsDAO.getNewsById(newsId).map{
+//      case Some(news) =>
+//
+//      case None =>
+//        Future.successful(Ok(ErrorCode.newsNotExist))
 //    }
 //  }
+//
 //
 //
 //

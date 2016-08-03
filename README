@@ -200,7 +200,8 @@ GET   pageSize可选
         "userName"->"",
         "userPic"->"",
         "content"->"", -- 评论内容
-        "reId"->""  --回复给某人 被回复人的id
+        "reId"->0,  --回复给某人 被回复人的id
+        "reName"->""
       }
       ]  --评论
     }
@@ -208,7 +209,21 @@ GET   pageSize可选
 }
 
 
+3、创建评论 prometheus/moment/createComment
+POST 参数
+{
+   "momentId":1,
+   "userId":1,
+   "content":"",
+   "reUid":1
+}
 
+4、点赞 prometheus/moment/createVote
+POST 参数
+{
+   "momentId":1,
+   "userId":1
+}
 
 
 

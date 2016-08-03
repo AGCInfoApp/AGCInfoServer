@@ -4,28 +4,29 @@
 
 # An example controller showing a sample home page
 #GET     /                           @controllers.HomeController.index
-GET         /prometheus                              @controllers.HomeController.index
+GET         /prometheus                             @controllers.HomeController.index
 
 # An example controller showing how to use dependency injection
-GET         /prometheus/count                        @controllers.CountController.count
+GET         /prometheus/count                       @controllers.CountController.count
 # An example controller showing how to write asynchronous code
-GET         /prometheus/message                      @controllers.AsyncController.message
+GET         /prometheus/message                     @controllers.AsyncController.message
 
 #routes for user
-POST        /prometheus/user/register                @controllers.UserController.userRegister
-POST        /prometheus/user/login                   @controllers.UserController.userLogin
-GET         /prometheus/user/getInfo                 @controllers.UserController.getMyInfo(userId:Long,token:String)
-POST        /prometheus/user/editInfo                @controllers.UserController.editInfo
+POST        /prometheus/user/register               @controllers.UserController.userRegister
+POST        /prometheus/user/login                  @controllers.UserController.userLogin
+GET         /prometheus/user/getInfo                @controllers.UserController.getMyInfo(userId:Long,token:String)
+POST        /prometheus/user/editInfo               @controllers.UserController.editInfo
 
-POST        /prometheus/user/followOther             @controllers.UserController.followOtherUser
-GET         /prometheus/user/getFriend               @controllers.UserController.getUserFriend(userId:Long)
-GET         /prometheus/user/getFans                 @controllers.UserController.getUserFans(userId:Long)
-GET         /prometheus/user/getOtherInfo            @controllers.UserController.getUserInfo(userId:Long)
-GET         /prometheus/user/searchUser              @controllers.UserController.searchUser(searchKey:String)
+POST        /prometheus/user/followOther            @controllers.UserController.followOtherUser
+GET         /prometheus/user/getFriend              @controllers.UserController.getUserFriend(userId:Long)
+GET         /prometheus/user/getFans                @controllers.UserController.getUserFans(userId:Long)
+GET         /prometheus/user/getOtherInfo           @controllers.UserController.getUserInfo(userId:Long)
+GET         /prometheus/user/searchUser             @controllers.UserController.searchUser(searchKey:String)
 
-POST        /prometheus/moment/createMoment          @controllers.Moment.createMoment
-GET         /prometheus/moment/listMoment            @controllers.Moment.listMoment(userId:Long,page:Int,pageSize:Option[Int])
-
+POST        /prometheus/moment/createMoment         @controllers.Moment.createMoment
+GET         /prometheus/moment/listMoment           @controllers.Moment.listMoment(userId:Long,page:Int,pageSize:Option[Int])
+POST        /prometheus/moment/createComment        @controllers.Moment.createComment
+POST        /prometheus/moment/createVote           @controllers.Moment.createVote
 
 
 # routes for news
@@ -49,5 +50,5 @@ GET         /prometheus/moment/listMoment            @controllers.Moment.listMom
 
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /prometheus/assets/*file                 controllers.Assets.versioned(path="/public", file: Asset)
+GET         /prometheus/assets/*file                controllers.Assets.versioned(path="/public", file: Asset)
 #GET         /prometheus/webjars/*file                        controllers.WebJarAssets.at(file)

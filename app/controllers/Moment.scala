@@ -85,19 +85,32 @@ class Moment@Inject()(
           })
         }
 
-        val commentFuture=momentDAO.getMomentComment(moment.id).flatMap{res=>
-          Future.sequence(res.map{comment=>
-            userDAO.getUserById(comment.userid).map{
-              case Some(user)=>
-                Json.obj(
-                  "userId"->user.id,
-                  "userName"->user.nickname,
-                  "userPic"->user.pic,
-                  "content"->comment.commentContent,
-                  "reId"->comment.reUid
-                )
-              case None=>
-                JsNull
+        val commentFuture = momentDAO.getMomentComment(moment.id).flatMap { res =>
+          Future.sequence(res.map { comment =>
+            userDAO.getUserById(comment.userid).flatMap {
+              case Some(user) =>
+                userDAO.getUserById(comment.reUid).map {
+                  case Some(reUser) =>
+                    Json.obj(
+                      "userId" -> user.id,
+                      "userName" -> user.nickname,
+                      "userPic" -> user.pic,
+                      "content" -> comment.commentContent,
+                      "reId" -> comment.reUid,
+                      "reName" -> reUser.nickname
+                    )
+                  case None =>
+                    Json.obj(
+                      "userId" -> user.id,
+                      "userName" -> user.nickname,
+                      "userPic" -> user.pic,
+                      "content" -> comment.commentContent,
+                      "reId" -> comment.reUid,
+                      "reName" -> ""
+                    )
+                }
+              case None =>
+                Future(JsNull)
             }
           })
         }
@@ -123,6 +136,49 @@ class Moment@Inject()(
       }).map{data=>
         Ok(successResult(Json.obj("data"->data)))
       }
+    }
+  }
+
+
+
+  def createComment=Action.async{implicit request=>
+    request.body.asJson match{
+      case Some(json)=>
+        val momentId = (json \ "momentId").as[Long]
+        val userId = (json \ "userId").as[Long]
+        val content = (json \ "content").as[String]
+        val reUid = (json \ "reUid").asOpt[Long].getOrElse(0l)
+        val createTime = System.currentTimeMillis()
+        momentDAO.createComment(userId,momentId,content,reUid,createTime).map{res=>
+          if(res>0l)
+            Ok(success)
+          else
+            Ok(ErrorCode.commentCreateFailed)
+        }
+      case None=>
+        Future.successful(Ok(ErrorCode.requestAsJsonEmpty))
+    }
+  }
+
+  def createVote = Action.async{implicit request=>
+    request.body.asJson match{
+      case Some(json)=>
+        val momentId = (json \ "momentId").as[Long]
+        val userId = (json \ "userId").as[Long]
+        val createTime = System.currentTimeMillis()
+        userDAO.getUserById(userId).flatMap {
+          case Some(user)=>
+          momentDAO.createVote(momentId,userId,user.nickname,user.pic, createTime).map{ res =>
+            if (res > 0l)
+              Ok(success)
+            else
+              Ok(ErrorCode.commentCreateFailed)
+          }
+          case None =>
+            Future.successful(Ok(ErrorCode.userNotExist))
+        }
+      case None=>
+        Future.successful(Ok(ErrorCode.requestAsJsonEmpty))
     }
   }
 

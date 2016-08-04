@@ -4,6 +4,7 @@ import java.io.File
 
 import com.google.inject.{Inject, Singleton}
 import models.JsonProtocols
+import org.slf4j.LoggerFactory
 import play.api.libs.json.Json
 import play.api.mvc.{Action, Controller}
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -16,6 +17,7 @@ import scala.concurrent.Future
 class Service@Inject()(
 
                         )extends Controller with JsonProtocols{
+  private val log = LoggerFactory.getLogger(this.getClass)
 
   def uploadPic = Action.async { implicit request =>
     try {
@@ -39,6 +41,7 @@ class Service@Inject()(
       }
     } catch {
       case e: Exception =>
+        log.info(s"exception:$e")
         Future(Ok(ErrorCode.uploadPicFailed))
     }
   }

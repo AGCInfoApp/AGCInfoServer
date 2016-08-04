@@ -31,6 +31,7 @@ POST        /prometheus/moment/createVote           @controllers.Moment.createVo
 # routes about routes
 POST        /prometheus/moment/createMoment          @controllers.Moment.createMoment
 
+POST        /prometheus/service/uploadPic            @controllers.Service.uploadPic
 
 # routes for news
 #GET         /prometheus/news/listByCat               @controllers.NewsController.getNewsBySite(cateId:Int,page:Option[Int])

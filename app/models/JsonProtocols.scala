@@ -31,6 +31,9 @@ trait JsonProtocols {
     val commentCreateFailed=jsonResult(1000401,"create comments failed!")
 
     val momentCreateFailed = jsonResult(1000501,"创建失败！请稍后重试")
+
+    val uploadPicFailed = jsonResult(1000601,"上传失败！")
+    val uploadPicEmpty =jsonResult(1000602, "图片不能为空！")
   }
 
 

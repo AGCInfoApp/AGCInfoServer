@@ -149,7 +149,7 @@ class Moment@Inject()(
         val content = (json \ "content").as[String]
         val reUid = (json \ "reUid").asOpt[Long].getOrElse(0l)
         val createTime = System.currentTimeMillis()
-        momentDAO.createComment(userId,momentId,content,reUid,createTime).map{res=>
+        momentDAO.createComment(momentId,userId,content,reUid,createTime).map{res=>
           if(res>0l)
             Ok(success)
           else

@@ -38,7 +38,7 @@ class NewsDAO @Inject()(
     db.run(news.filter(_.id === id).result.headOption)
   }
 
-  def getAllnews = {
+  def getAllNews = {
     db.run(news.result)
   }
 

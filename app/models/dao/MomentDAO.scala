@@ -69,7 +69,7 @@ class MomentDAO@Inject()(
       createTime = createTime
     )
 
-    db.run(comment returning moment.map(_.id)+=r ).mapTo[Long]
+    db.run(comment returning comment.map(_.id)+=r ).mapTo[Long]
   }
 
   def createVote(momentId:Long,userid:Long,userName:String,userPic:String,createTime:Long)={

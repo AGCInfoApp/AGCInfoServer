@@ -28,6 +28,9 @@ GET         /prometheus/moment/listMoment           @controllers.Moment.listMome
 POST        /prometheus/moment/createComment        @controllers.Moment.createComment
 POST        /prometheus/moment/createVote           @controllers.Moment.createVote
 
+# routes about routes
+POST        /prometheus/moment/createMoment          @controllers.Moment.createMoment
+
 
 # routes for news
 #GET         /prometheus/news/listByCat               @controllers.NewsController.getNewsBySite(cateId:Int,page:Option[Int])

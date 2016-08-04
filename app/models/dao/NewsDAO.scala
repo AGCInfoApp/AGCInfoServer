@@ -25,7 +25,7 @@ class NewsDAO @Inject()(
   private val log = LoggerFactory.getLogger(this.getClass)
 
   private val news = SlickTables.tNews
-  private val newsComment = SlickTables.tNewsComment
+  private val comments = SlickTables.tNewsComment
 
 
   def listNews(cateId:Int,curPage: Int, pageSize: Int) = {
@@ -56,7 +56,7 @@ class NewsDAO @Inject()(
 
 
   def getNewsCommentNum(newsId:Long)={
-    db.run(newsComment.filter(_.newsId===newsId).size.result)
+    db.run(comments.filter(_.newsId===newsId).size.result)
   }
 
 
@@ -80,7 +80,7 @@ class NewsDAO @Inject()(
   }
 
 
-  def deleteNews(cateId: Int, newsId: Long) = {
+  def deleteNews(newsId: Long) = {
     db.run(news.filter(_.id === newsId).delete)
   }
 
@@ -88,6 +88,38 @@ class NewsDAO @Inject()(
   def getKeyword() = {
     db.run(news.sortBy(_.createTime desc).take(10).map(_.tags).result)
   }
+
+
+
+  /************ comment ******************/
+
+
+    //创建评价
+    def createComment(comment:SlickTables.rNewsComment)={
+      db.run((comments returning comments.map(_.id))+=comment).mapTo[Long]
+    }
+
+    //news评论数量
+    def getSumOfNews(newsId:Long)={
+      db.run(comments.filter(c=>c.newsId===newsId).size.result)
+    }
+
+    //user的评论数量
+    def getSumOfUser(userId:Long)={
+      db.run(comments.filter(_.userid===userId).size.result)
+    }
+
+    //获取新闻评论 分页
+    def getCommentByNewsId(newsId:Long,pageSize:Int,curPage:Int)={
+      db.run(comments.filter(c=>c.newsId===newsId).sortBy(_.createTime.desc).drop((curPage-1)*pageSize)
+        .take(pageSize).result)
+    }
+
+    //获取个人评论
+    def getCommentByUser(userId:Long,curPage:Int,pageSize:Int)={
+      db.run(comments.filter(_.userid===userId).drop((curPage-1)*pageSize)
+        .take(pageSize).result)
+    }
 
 
 }

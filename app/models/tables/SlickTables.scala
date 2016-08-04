@@ -15,9 +15,35 @@ trait SlickTables {
   import slick.jdbc.{GetResult => GR}
 
   /** DDL for all tables. Call .create to execute. */
-  lazy val schema: profile.SchemaDescription = Array(tCollection.schema, tFriend.schema, tMoment.schema, tMomentComment.schema, tMomentVote.schema, tNews.schema, tNewsComment.schema, tReadingRecord.schema, tUser.schema).reduceLeft(_ ++ _)
+  lazy val schema: profile.SchemaDescription = Array(tCategory.schema, tCollection.schema, tFriend.schema, tMoment.schema, tMomentComment.schema, tMomentVote.schema, tNews.schema, tNewsComment.schema, tReadingRecord.schema, tUser.schema).reduceLeft(_ ++ _)
   @deprecated("Use .schema instead of .ddl", "3.0")
   def ddl = schema
+
+  /** Entity class storing rows of table tCategory
+   *  @param id Database column id SqlType(BIGINT), AutoInc, PrimaryKey
+   *  @param cateId Database column cate_id SqlType(BIGINT), Default(0)
+   *  @param category Database column category SqlType(VARCHAR), Length(200,true), Default() */
+  case class rCategory(id: Long, cateId: Long = 0L, category: String = "")
+  /** GetResult implicit for fetching rCategory objects using plain SQL queries */
+  implicit def GetResultrCategory(implicit e0: GR[Long], e1: GR[String]): GR[rCategory] = GR{
+    prs => import prs._
+    rCategory.tupled((<<[Long], <<[Long], <<[String]))
+  }
+  /** Table description of table category. Objects of this class serve as prototypes for rows in queries. */
+  class tCategory(_tableTag: Tag) extends Table[rCategory](_tableTag, "category") {
+    def * = (id, cateId, category) <> (rCategory.tupled, rCategory.unapply)
+    /** Maps whole row to an option. Useful for outer joins. */
+    def ? = (Rep.Some(id), Rep.Some(cateId), Rep.Some(category)).shaped.<>({r=>import r._; _1.map(_=> rCategory.tupled((_1.get, _2.get, _3.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+
+    /** Database column id SqlType(BIGINT), AutoInc, PrimaryKey */
+    val id: Rep[Long] = column[Long]("id", O.AutoInc, O.PrimaryKey)
+    /** Database column cate_id SqlType(BIGINT), Default(0) */
+    val cateId: Rep[Long] = column[Long]("cate_id", O.Default(0L))
+    /** Database column category SqlType(VARCHAR), Length(200,true), Default() */
+    val category: Rep[String] = column[String]("category", O.Length(200,varying=true), O.Default(""))
+  }
+  /** Collection-like TableQuery object for table tCategory */
+  lazy val tCategory = new TableQuery(tag => new tCategory(tag))
 
   /** Entity class storing rows of table tCollection
    *  @param id Database column id SqlType(BIGINT), AutoInc, PrimaryKey
@@ -217,8 +243,8 @@ trait SlickTables {
    *  @param thumbnail Database column thumbnail SqlType(VARCHAR), Length(300,true), Default()
    *  @param description Database column description SqlType(VARCHAR), Length(300,true), Default()
    *  @param createTime Database column create_time SqlType(BIGINT)
-   *  @param content Database column content SqlType(VARCHAR), Length(17000,true), Default()
-   *  @param picUrls Database column pic_urls SqlType(VARCHAR), Length(1000,true), Default()
+   *  @param content Database column content SqlType(VARCHAR), Length(15000,true)
+   *  @param picUrls Database column pic_urls SqlType(VARCHAR), Length(3000,true)
    *  @param barcode Database column barcode SqlType(VARCHAR), Length(300,true), Default()
    *  @param introduce Database column introduce SqlType(VARCHAR), Length(300,true), Default()
    *  @param cateId Database column cate_id SqlType(INT), Default(0)
@@ -229,7 +255,7 @@ trait SlickTables {
    *  @param commentNum Database column comment_num SqlType(INT), Default(0)
    *  @param relationNews Database column relation_news SqlType(VARCHAR), Length(300,true), Default()
    *  @param other Database column other SqlType(VARCHAR), Length(500,true), Default() */
-  case class rNews(id: Long, title: String = "", author: String = "", source: String = "", thumbnail: String = "", description: String = "", createTime: Long, content: String = "", picUrls: String = "", barcode: String = "", introduce: String = "", cateId: Int = 0, category: String = "", url: String = "", tags: String = "", readNum: Int = 0, commentNum: Int = 0, relationNews: String = "", other: String = "")
+  case class rNews(id: Long, title: String = "", author: String = "", source: String = "", thumbnail: String = "", description: String = "", createTime: Long, content: String, picUrls: String, barcode: String = "", introduce: String = "", cateId: Int = 0, category: String = "", url: String = "", tags: String = "", readNum: Int = 0, commentNum: Int = 0, relationNews: String = "", other: String = "")
   /** GetResult implicit for fetching rNews objects using plain SQL queries */
   implicit def GetResultrNews(implicit e0: GR[Long], e1: GR[String], e2: GR[Int]): GR[rNews] = GR{
     prs => import prs._
@@ -255,10 +281,10 @@ trait SlickTables {
     val description: Rep[String] = column[String]("description", O.Length(300,varying=true), O.Default(""))
     /** Database column create_time SqlType(BIGINT) */
     val createTime: Rep[Long] = column[Long]("create_time")
-    /** Database column content SqlType(VARCHAR), Length(17000,true), Default() */
-    val content: Rep[String] = column[String]("content", O.Length(17000,varying=true), O.Default(""))
-    /** Database column pic_urls SqlType(VARCHAR), Length(1000,true), Default() */
-    val picUrls: Rep[String] = column[String]("pic_urls", O.Length(1000,varying=true), O.Default(""))
+    /** Database column content SqlType(VARCHAR), Length(15000,true) */
+    val content: Rep[String] = column[String]("content", O.Length(15000,varying=true))
+    /** Database column pic_urls SqlType(VARCHAR), Length(3000,true) */
+    val picUrls: Rep[String] = column[String]("pic_urls", O.Length(3000,varying=true))
     /** Database column barcode SqlType(VARCHAR), Length(300,true), Default() */
     val barcode: Rep[String] = column[String]("barcode", O.Length(300,varying=true), O.Default(""))
     /** Database column introduce SqlType(VARCHAR), Length(300,true), Default() */

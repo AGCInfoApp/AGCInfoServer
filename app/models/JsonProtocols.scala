@@ -70,41 +70,40 @@ trait JsonProtocols {
     }
   }
 
-//
-//  implicit val rComment:Writes[rComment] = new Writes[rComment]{
-//    override def writes(obj:rComment):JsValue={
-//      Json.obj(
-//        "id"->obj.id,
-//        "userId"->obj.userid,
-//        "userName"->obj.userName,
-//        "userPic"->obj.userPic,
-//        "newsId"->obj.newsId,
-//        "content"->obj.content,
-//        "reId"->obj.reId,
-//        "createTime"->obj.createTime
-//      )
-//    }
-//  }
-//
-//  implicit val rWangyi:Writes[rWangyi] = new Writes[rWangyi]{
-//    override def writes(obj:rWangyi):JsValue={
-//      Json.obj(
-//        "id"->obj.id,
-//        "title"->obj.title,
-//        "author"->obj.author,
-//        "source"->obj.source,
-//        "thumbnail"->obj.thumbnail,
-//        "description"->obj.description,
-//        "createTime"->obj.createTime,
-//        "content"->obj.content,
-//        "picUrls"->obj.picUrls,
-//        "cateId"->obj.cateId,
-//        "category"->obj.category,
-//        "url"->obj.url,
-//        "tags"->obj.tags
-//      )
-//    }
-//  }
+  implicit val rNewsComment:Writes[rNewsComment] = new Writes[rNewsComment]{
+    override def writes(obj:rNewsComment):JsValue={
+      Json.obj(
+        "id"->obj.id,
+        "userId"->obj.userid,
+        "userName"->obj.userName,
+        "userPic"->obj.userPic,
+        "newsId"->obj.newsId,
+        "content"->obj.content,
+        "reId"->obj.reId,
+        "createTime"->obj.createTime
+      )
+    }
+  }
+
+  implicit val rNews:Writes[rNews] = new Writes[rNews]{
+    override def writes(obj:rNews):JsValue={
+      Json.obj(
+        "id"->obj.id,
+        "title"->obj.title,
+        "author"->obj.author,
+        "source"->obj.source,
+        "thumbnail"->obj.thumbnail,
+        "description"->obj.description,
+        "createTime"->obj.createTime,
+        "content"->obj.content,
+        "picUrls"->obj.picUrls.split("#").toList,
+        "cateId"->obj.cateId,
+        "category"->obj.category,
+        "url"->obj.url,
+        "tags"->obj.tags
+      )
+    }
+  }
 //
 //
 //  implicit val rLeifeng:Writes[rLeifeng] = new Writes[rLeifeng]{

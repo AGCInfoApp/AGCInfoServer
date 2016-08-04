@@ -32,7 +32,7 @@ class Service@Inject()(
             if (!dir.exists() && !dir.isDirectory()) dir.mkdir()
             val data = file.moveTo(new File(dir.getCanonicalPath + "/" + fileName))
             val path = "prometheus/pic/"
-            Future(Ok(successResult(Json.obj("data"->(path+fileName)))))
+            Future(Ok(successResult(Json.obj("data"->(path+fileName),"name"->data.getName))))
           } else {
             Future(Ok(ErrorCode.uploadPicEmpty))
           }

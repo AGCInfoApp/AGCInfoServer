@@ -28,10 +28,10 @@ class Service@Inject()(
             val fName = multiForm.file("image").get.filename.split("\\.").head
             val fileType =multiForm.file("image").get.filename.split("\\.")(1)
             val fileName = System.currentTimeMillis() + fName+"." + fileType
-            val dir = new File("public/pic")
+            val dir = new File("/var/www/html/pic_server")
             if (!dir.exists() && !dir.isDirectory()) dir.mkdir()
             val data = file.moveTo(new File(dir.getCanonicalPath + "/" + fileName))
-            val path = "prometheus/assets/pic/"
+            val path = "pic_server/"
             Future(Ok(successResult(Json.obj("data"->(path+fileName),"name"->data.getName))))
           } else {
             Future(Ok(ErrorCode.uploadPicEmpty))

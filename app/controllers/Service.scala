@@ -33,7 +33,7 @@ class Service@Inject()(
             val data = file.moveTo(new File(dir.getCanonicalPath + "/" + fileName))
             data.setReadable(true)
             data.setExecutable(true)
-            Runtime.getRuntime().exec("chmod 777 "+data)
+            Runtime.getRuntime().exec("chmod 644 "+data)
             log.info("file permision"+data.canExecute)
             val path = "pic_server/"
             Future(Ok(successResult(Json.obj("data"->(path+fileName),"name"->data.getName))))

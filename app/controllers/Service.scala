@@ -31,6 +31,7 @@ class Service@Inject()(
             val dir = new File("/var/www/html/pic_server")
             if (!dir.exists() && !dir.isDirectory()) dir.mkdir()
             val data = file.moveTo(new File(dir.getCanonicalPath + "/" + fileName))
+            data.setReadable(true)
             val path = "pic_server/"
             Future(Ok(successResult(Json.obj("data"->(path+fileName),"name"->data.getName))))
           } else {

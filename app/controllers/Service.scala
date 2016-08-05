@@ -31,10 +31,7 @@ class Service@Inject()(
             val dir = new File("/var/www/html/pic_server")
             if (!dir.exists() && !dir.isDirectory()) dir.mkdir()
             val data = file.moveTo(new File(dir.getCanonicalPath + "/" + fileName))
-            data.setReadable(true)
-            data.setExecutable(true)
-            Runtime.getRuntime().exec("chmod 644 "+data)
-            log.info("file permision"+data.canExecute)
+            Runtime.getRuntime.exec("chmod 644 "+data)
             val path = "pic_server/"
             Future(Ok(successResult(Json.obj("data"->(path+fileName),"name"->data.getName))))
           } else {

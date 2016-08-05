@@ -26,6 +26,7 @@ class NewsDAO @Inject()(
 
   private val news = SlickTables.tNews
   private val comments = SlickTables.tNewsComment
+  private val colloction = SlickTables.tCollection
 
 
   def listNews(cateId:Int,curPage: Int, pageSize: Int) = {
@@ -94,32 +95,49 @@ class NewsDAO @Inject()(
   /************ comment ******************/
 
 
-    //创建评价
     def createComment(comment:SlickTables.rNewsComment)={
       db.run((comments returning comments.map(_.id))+=comment).mapTo[Long]
     }
 
-    //news评论数量
     def getSumOfNews(newsId:Long)={
       db.run(comments.filter(c=>c.newsId===newsId).size.result)
     }
 
-    //user的评论数量
     def getSumOfUser(userId:Long)={
       db.run(comments.filter(_.userid===userId).size.result)
     }
 
-    //获取新闻评论 分页
     def getCommentByNewsId(newsId:Long,pageSize:Int,curPage:Int)={
       db.run(comments.filter(c=>c.newsId===newsId).sortBy(_.createTime.desc).drop((curPage-1)*pageSize)
         .take(pageSize).result)
     }
 
-    //获取个人评论
     def getCommentByUser(userId:Long,curPage:Int,pageSize:Int)={
       db.run(comments.filter(_.userid===userId).drop((curPage-1)*pageSize)
         .take(pageSize).result)
     }
+
+
+  /**************  collection  *********************/
+  def createCollect(cateId:Int,newsId:Long,newsTitle:String,userId:Long,createTime:Long,tags:String)={
+    val r = SlickTables.rCollection(
+      id = -1l,
+      cateId = cateId,
+      newsId = newsId,
+      newsTitle = newsTitle,
+      userId = userId,
+      createTime = createTime,
+      tags = tags
+    )
+    db.run(colloction returning colloction.map(_.id)+=r).mapTo[Long]
+  }
+
+
+  def getCollectByUser(userId:Long,page:Int,pageSize:Int)={
+    db.run(colloction.filter(_.userId===userId).sortBy(_.createTime.desc).
+      drop((page-1)*pageSize).take(pageSize).result)
+  }
+
 
 
 }

@@ -155,6 +155,10 @@ class NewsController@Inject()(
 
 
 
+  /***************** about collection *********************/
+  def createCollect()=Action.async{
+
+  }
 
 
 

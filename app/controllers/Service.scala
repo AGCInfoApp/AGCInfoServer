@@ -29,7 +29,7 @@ class Service@Inject()(
             val fileType =multiForm.file("image").get.filename.split("\\.")(1)
             val fileName = System.currentTimeMillis() + fName+"." + fileType
             val dir = new File("/var/www/html/pic_server")
-            if (!dir.exists() && !dir.isDirectory()) dir.mkdir()
+            if (!dir.exists() && !dir.isDirectory) dir.mkdir()
             val data = file.moveTo(new File(dir.getCanonicalPath + "/" + fileName))
             Runtime.getRuntime.exec("chmod 644 "+data)
             val path = "pic_server/"

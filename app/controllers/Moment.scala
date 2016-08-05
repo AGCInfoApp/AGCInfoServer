@@ -118,6 +118,7 @@ class Moment@Inject()(
           vote<-voteFuture
           comment<-commentFuture
         }yield {
+          val hasVote = if(vote.exists(t=>(t \ "userId").as[Long]==userId)) 1 else 0
           Json.obj(
             "id"->moment.id,
             "userid"->moment.userid,
@@ -129,6 +130,7 @@ class Moment@Inject()(
             "newsDesc"->moment.newsDesc,
             "message"->moment.message,
             "createTime"->moment.createTime,
+            "hasVote"->hasVote,
             "vote"->vote,
             "comment"->comment
           )

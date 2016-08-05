@@ -187,6 +187,7 @@ GET   pageSize可选
       "newsDesc": "aaa.png#bbb.png", --新闻描述
       "message": "",  --发表的内容
       "createTime": 1469811167457, --时间
+      "hasVote":0,  -- 1已赞 0 未赞
       "vote": [
         {
       "userId"->2,

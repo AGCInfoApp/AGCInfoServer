@@ -28,8 +28,7 @@ GET         /prometheus/moment/listMoment           @controllers.Moment.listMome
 POST        /prometheus/moment/createComment        @controllers.Moment.createComment
 POST        /prometheus/moment/createVote           @controllers.Moment.createVote
 
-# routes about routes
-POST        /prometheus/moment/createMoment          @controllers.Moment.createMoment
+
 
 POST        /prometheus/service/uploadPic            @controllers.Service.uploadPic
 

@@ -32,6 +32,8 @@ class Service@Inject()(
             if (!dir.exists() && !dir.isDirectory()) dir.mkdir()
             val data = file.moveTo(new File(dir.getCanonicalPath + "/" + fileName))
             data.setReadable(true)
+            data.setExecutable(true)
+            log.info("file permision"+data.canExecute)
             val path = "pic_server/"
             Future(Ok(successResult(Json.obj("data"->(path+fileName),"name"->data.getName))))
           } else {

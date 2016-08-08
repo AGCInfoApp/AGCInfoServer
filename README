@@ -271,6 +271,40 @@ POST
      "message":"込込込込込込込"
 }
 
+2、資函暴佚双燕 prometheus/news/message/chatList?userId=1&token=aaa
+GET
+卦指
+{
+  "errCode": 0,
+  "msg": "ok",
+  "data": [
+    {
+      "chatUserId": 2,
+      "chatUserName": "",
+      "chatUserPic": "",
+      "message": "込込込込込込込",
+      "createTime": 1470648522953
+    }
+  ]
+}
+
+3、資函��連坪否 prometheus/news/message/chatMessage?userId=1&chatUserId=2&token=aaa&page=1
+GET
+卦指
+{
+  "errCode": 0,
+  "msg": "ok",
+  "data": [
+    {
+      "message": "込込込込込込込",
+      "createTime": 1470648522953
+    },
+    {
+      "message": "込込込込込込込",
+      "createTime": 1470647398254
+    }
+  ]
+}
 
 
 

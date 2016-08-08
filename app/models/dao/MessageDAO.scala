@@ -54,7 +54,7 @@ class MessageDAO @Inject()(
   }
 
   def getChatList(userId:Long)={
-    db.run(chatList.filter(_.userId===userId).result)
+    db.run(chatList.filter(_.userId===userId).sortBy(_.createTime.desc).result)
   }
 
 }

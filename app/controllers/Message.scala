@@ -5,6 +5,7 @@ import models.JsonProtocols
 import models.dao.{MessageDAO, UserDAO, RecordDAO, NewsDAO}
 import models.tables.SlickTables
 import org.slf4j.LoggerFactory
+import play.api.libs.json.{JsNull, Json}
 import play.api.mvc.{Action, Controller}
 
 import scala.concurrent.Future
@@ -50,6 +51,44 @@ class Message@Inject()(
         Future.successful(Ok(ErrorCode.requestAsJsonEmpty))
     }
   }
+
+
+  def getChatList(userId:Long,token:String)=Action.async{implicit request=>
+    messageDAO.getChatList(userId).flatMap{seq=>
+      Future.sequence(seq.map{chat=>
+        userDAO.getUserById(chat.chatUserId).map{
+          case Some(user)=>
+            Json.obj(
+              "chatUserId"->user.id,
+              "chatUserName"->user.nickname,
+              "chatUserPic"->user.pic,
+              "message"->chat.lastMessage,
+              "createTime"->chat.createTime
+            )
+          case None=>
+            JsNull
+        }
+      }).map{data=>
+        Ok(successResult(Json.obj("data"->data.filterNot(t=>t==JsNull))))
+      }
+    }
+  }
+
+  def getChatMessage(userId:Long,token:String,chatUserId:Long,
+    page:Int,pageSize:Option[Int])=Action.async{implicit request=>
+    val curPage = if(page<1) 1 else page
+    val curPageSize = pageSize.getOrElse(20)
+    messageDAO.getMessage(userId,chatUserId,curPage,curPageSize).map{seq=>
+      val data = seq.map{msg=>
+        Json.obj(
+        "message"->msg.message,
+        "createTime"->msg.createTime
+        )
+      }
+      Ok(successResult(Json.obj("data"->data)))
+    }
+  }
+
 
 }
 

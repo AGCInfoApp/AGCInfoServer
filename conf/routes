@@ -4,58 +4,60 @@
 
 # An example controller showing a sample home page
 #GET     /                           @controllers.HomeController.index
-GET         /prometheus                             @controllers.HomeController.index
+GET         /prometheus                               @controllers.HomeController.index
 
 # An example controller showing how to use dependency injection
-GET         /prometheus/count                       @controllers.CountController.count
+GET         /prometheus/count                         @controllers.CountController.count
 # An example controller showing how to write asynchronous code
-GET         /prometheus/message                     @controllers.AsyncController.message
+GET         /prometheus/message                       @controllers.AsyncController.message
 
 #routes for user
-POST        /prometheus/user/register               @controllers.UserController.userRegister
-POST        /prometheus/user/login                  @controllers.UserController.userLogin
-GET         /prometheus/user/getInfo                @controllers.UserController.getMyInfo(userId:Long,token:String)
-POST        /prometheus/user/editInfo               @controllers.UserController.editInfo
+POST        /prometheus/user/register                 @controllers.UserController.userRegister
+POST        /prometheus/user/login                    @controllers.UserController.userLogin
+GET         /prometheus/user/getInfo                  @controllers.UserController.getMyInfo(userId:Long,token:String)
+POST        /prometheus/user/editInfo                 @controllers.UserController.editInfo
 
-POST        /prometheus/user/followOther            @controllers.UserController.followOtherUser
-GET         /prometheus/user/getFriend              @controllers.UserController.getUserFriend(userId:Long)
-GET         /prometheus/user/getFans                @controllers.UserController.getUserFans(userId:Long)
-GET         /prometheus/user/getOtherInfo           @controllers.UserController.getUserInfo(userId:Long)
-GET         /prometheus/user/searchUser             @controllers.UserController.searchUser(searchKey:String)
+POST        /prometheus/user/followOther              @controllers.UserController.followOtherUser
+GET         /prometheus/user/getFriend                @controllers.UserController.getUserFriend(userId:Long)
+GET         /prometheus/user/getFans                  @controllers.UserController.getUserFans(userId:Long)
+GET         /prometheus/user/getOtherInfo             @controllers.UserController.getUserInfo(userId:Long)
+GET         /prometheus/user/searchUser               @controllers.UserController.searchUser(searchKey:String)
 
-POST        /prometheus/moment/createMoment         @controllers.Moment.createMoment
-GET         /prometheus/moment/listMoment           @controllers.Moment.listMoment(userId:Long,page:Int,pageSize:Option[Int])
-POST        /prometheus/moment/createComment        @controllers.Moment.createComment
-POST        /prometheus/moment/createVote           @controllers.Moment.createVote
+POST        /prometheus/moment/createMoment           @controllers.Moment.createMoment
+GET         /prometheus/moment/listMoment             @controllers.Moment.listMoment(userId:Long,page:Int,pageSize:Option[Int])
+POST        /prometheus/moment/createComment          @controllers.Moment.createComment
+POST        /prometheus/moment/createVote             @controllers.Moment.createVote
 
 
 
-POST        /prometheus/service/uploadPic            @controllers.Service.uploadPic
+POST        /prometheus/service/uploadPic             @controllers.Service.uploadPic
 
 # routes for news
-GET         /prometheus/news/listByCat               @controllers.NewsController.listNews(cateId:Int,page:Int,pageSize:Option[Int])
-GET         /prometheus/news/getInfo                 @controllers.NewsController.getNewsInfo(newsId:Long,userId:Long)
-GET         /prometheus/news/search                  @controllers.NewsController.searchNews(searchKey:String)
-GET         /prometheus/news/getKeyword              @controllers.NewsController.getRecentKeyword
+GET         /prometheus/news/listByCat                @controllers.NewsController.listNews(cateId:Int,page:Int,pageSize:Option[Int])
+GET         /prometheus/news/getInfo                  @controllers.NewsController.getNewsInfo(newsId:Long,userId:Long)
+GET         /prometheus/news/search                   @controllers.NewsController.searchNews(searchKey:String)
+GET         /prometheus/news/getKeyword               @controllers.NewsController.getRecentKeyword
 
-GET         /prometheus/news/deleteNews              @controllers.NewsController.deleteNews(newsId:Long)
+GET         /prometheus/news/deleteNews               @controllers.NewsController.deleteNews(newsId:Long)
 
 #routes for comment
-POST        /prometheus/news/comment/create          @controllers.NewsController.createComment
-GET         /prometheus/news/comment/getByNews       @controllers.NewsController.getCommentByNews(newsId:Long,page:Int,pageSize:Option[Int])
+POST        /prometheus/news/comment/create           @controllers.NewsController.createComment
+GET         /prometheus/news/comment/getByNews        @controllers.NewsController.getCommentByNews(newsId:Long,page:Int,pageSize:Option[Int])
 
 # routes for recomment
-GET         /prometheus/news/getRecommentNews        @controllers.NewsController.getRecommentNews(newsId:Long)
+GET         /prometheus/news/getRecommentNews         @controllers.NewsController.getRecommentNews(newsId:Long)
 
 
 # routes about collection
-GET         /prometheus/news/collect/create          @controllers.NewsController.createCollect(userId:Long,newsId:Long,token:String)
-GET         /prometheus/news/collect/getByUser       @controllers.NewsController.getCollection(userId:Long,token:String,page:Int,pageSize:Option[Int])
+GET         /prometheus/news/collect/create           @controllers.NewsController.createCollect(userId:Long,newsId:Long,token:String)
+GET         /prometheus/news/collect/getByUser        @controllers.NewsController.getCollection(userId:Long,token:String,page:Int,pageSize:Option[Int])
 
 
-POST        /prometheus/news/message/create          @controllers.Message.createMessage
+POST        /prometheus/news/message/create           @controllers.Message.createMessage
+GET         /prometheus/news/message/chatList         @controllers.Message.getChatList(userId:Long,token:String)
+GET         /prometheus/news/message/chatMessage      @controllers.Message.getChatMessage(userId:Long,token:String,chatUserId:Long,page:Int,pageSize:Option[Int])
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /prometheus/assets/*file                controllers.Assets.versioned(path="/public", file: Asset)
+GET         /prometheus/assets/*file                  controllers.Assets.versioned(path="/public", file: Asset)
 #GET         /prometheus/assets/*file                controllers.Assets.versioned(path="/images", file: Asset)
 #GET         /prometheus/webjars/*file                        controllers.WebJarAssets.at(file)

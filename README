@@ -256,9 +256,20 @@ POST
 
 
 
+================收藏===================
+1、创建  prometheus/news/collect/create?userId=1&newsId=13&token=aaa
+2、获取  prometheus/news/collect/getByUser?userId=1&token=aaa&page=1
 
 
-
+=================消息======================
+1、创建 prometheus/news/message/create
+POST
+{
+     "sendId":1,
+     "receiveId":2,  --均为用户id
+     "token":"aaa",
+     "message":"哈哈哈哈哈哈哈"
+}
 
 
 

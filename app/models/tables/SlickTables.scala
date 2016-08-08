@@ -15,7 +15,7 @@ trait SlickTables {
   import slick.jdbc.{GetResult => GR}
 
   /** DDL for all tables. Call .create to execute. */
-  lazy val schema: profile.SchemaDescription = Array(tCategory.schema, tCollection.schema, tFriend.schema, tMoment.schema, tMomentComment.schema, tMomentVote.schema, tNews.schema, tNewsComment.schema, tReadingRecord.schema, tUser.schema).reduceLeft(_ ++ _)
+  lazy val schema: profile.SchemaDescription = Array(tCategory.schema, tChatList.schema, tCollection.schema, tFriend.schema, tMessage.schema, tMoment.schema, tMomentComment.schema, tMomentVote.schema, tNews.schema, tNewsComment.schema, tReadingRecord.schema, tUser.schema).reduceLeft(_ ++ _)
   @deprecated("Use .schema instead of .ddl", "3.0")
   def ddl = schema
 
@@ -44,6 +44,38 @@ trait SlickTables {
   }
   /** Collection-like TableQuery object for table tCategory */
   lazy val tCategory = new TableQuery(tag => new tCategory(tag))
+
+  /** Entity class storing rows of table tChatList
+   *  @param id Database column id SqlType(BIGINT), AutoInc, PrimaryKey
+   *  @param userId Database column user_id SqlType(BIGINT), Default(0)
+   *  @param chatUserId Database column chat_user_Id SqlType(BIGINT), Default(0)
+   *  @param lastMessage Database column last_message SqlType(VARCHAR), Length(1000,true), Default()
+   *  @param createTime Database column create_time SqlType(BIGINT), Default(0) */
+  case class rChatList(id: Long, userId: Long = 0L, chatUserId: Long = 0L, lastMessage: String = "", createTime: Long = 0L)
+  /** GetResult implicit for fetching rChatList objects using plain SQL queries */
+  implicit def GetResultrChatList(implicit e0: GR[Long], e1: GR[String]): GR[rChatList] = GR{
+    prs => import prs._
+    rChatList.tupled((<<[Long], <<[Long], <<[Long], <<[String], <<[Long]))
+  }
+  /** Table description of table chat_list. Objects of this class serve as prototypes for rows in queries. */
+  class tChatList(_tableTag: Tag) extends Table[rChatList](_tableTag, "chat_list") {
+    def * = (id, userId, chatUserId, lastMessage, createTime) <> (rChatList.tupled, rChatList.unapply)
+    /** Maps whole row to an option. Useful for outer joins. */
+    def ? = (Rep.Some(id), Rep.Some(userId), Rep.Some(chatUserId), Rep.Some(lastMessage), Rep.Some(createTime)).shaped.<>({r=>import r._; _1.map(_=> rChatList.tupled((_1.get, _2.get, _3.get, _4.get, _5.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+
+    /** Database column id SqlType(BIGINT), AutoInc, PrimaryKey */
+    val id: Rep[Long] = column[Long]("id", O.AutoInc, O.PrimaryKey)
+    /** Database column user_id SqlType(BIGINT), Default(0) */
+    val userId: Rep[Long] = column[Long]("user_id", O.Default(0L))
+    /** Database column chat_user_Id SqlType(BIGINT), Default(0) */
+    val chatUserId: Rep[Long] = column[Long]("chat_user_Id", O.Default(0L))
+    /** Database column last_message SqlType(VARCHAR), Length(1000,true), Default() */
+    val lastMessage: Rep[String] = column[String]("last_message", O.Length(1000,varying=true), O.Default(""))
+    /** Database column create_time SqlType(BIGINT), Default(0) */
+    val createTime: Rep[Long] = column[Long]("create_time", O.Default(0L))
+  }
+  /** Collection-like TableQuery object for table tChatList */
+  lazy val tChatList = new TableQuery(tag => new tChatList(tag))
 
   /** Entity class storing rows of table tCollection
    *  @param id Database column id SqlType(BIGINT), AutoInc, PrimaryKey
@@ -114,6 +146,38 @@ trait SlickTables {
   }
   /** Collection-like TableQuery object for table tFriend */
   lazy val tFriend = new TableQuery(tag => new tFriend(tag))
+
+  /** Entity class storing rows of table tMessage
+   *  @param id Database column id SqlType(BIGINT), AutoInc, PrimaryKey
+   *  @param sendId Database column send_id SqlType(BIGINT), Default(0)
+   *  @param receiveId Database column receive_id SqlType(BIGINT), Default(0)
+   *  @param message Database column message SqlType(VARCHAR), Length(3000,true), Default()
+   *  @param createTime Database column create_time SqlType(BIGINT), Default(0) */
+  case class rMessage(id: Long, sendId: Long = 0L, receiveId: Long = 0L, message: String = "", createTime: Long = 0L)
+  /** GetResult implicit for fetching rMessage objects using plain SQL queries */
+  implicit def GetResultrMessage(implicit e0: GR[Long], e1: GR[String]): GR[rMessage] = GR{
+    prs => import prs._
+    rMessage.tupled((<<[Long], <<[Long], <<[Long], <<[String], <<[Long]))
+  }
+  /** Table description of table message. Objects of this class serve as prototypes for rows in queries. */
+  class tMessage(_tableTag: Tag) extends Table[rMessage](_tableTag, "message") {
+    def * = (id, sendId, receiveId, message, createTime) <> (rMessage.tupled, rMessage.unapply)
+    /** Maps whole row to an option. Useful for outer joins. */
+    def ? = (Rep.Some(id), Rep.Some(sendId), Rep.Some(receiveId), Rep.Some(message), Rep.Some(createTime)).shaped.<>({r=>import r._; _1.map(_=> rMessage.tupled((_1.get, _2.get, _3.get, _4.get, _5.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+
+    /** Database column id SqlType(BIGINT), AutoInc, PrimaryKey */
+    val id: Rep[Long] = column[Long]("id", O.AutoInc, O.PrimaryKey)
+    /** Database column send_id SqlType(BIGINT), Default(0) */
+    val sendId: Rep[Long] = column[Long]("send_id", O.Default(0L))
+    /** Database column receive_id SqlType(BIGINT), Default(0) */
+    val receiveId: Rep[Long] = column[Long]("receive_id", O.Default(0L))
+    /** Database column message SqlType(VARCHAR), Length(3000,true), Default() */
+    val message: Rep[String] = column[String]("message", O.Length(3000,varying=true), O.Default(""))
+    /** Database column create_time SqlType(BIGINT), Default(0) */
+    val createTime: Rep[Long] = column[Long]("create_time", O.Default(0L))
+  }
+  /** Collection-like TableQuery object for table tMessage */
+  lazy val tMessage = new TableQuery(tag => new tMessage(tag))
 
   /** Entity class storing rows of table tMoment
    *  @param id Database column id SqlType(BIGINT), AutoInc, PrimaryKey

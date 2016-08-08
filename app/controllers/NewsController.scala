@@ -156,9 +156,42 @@ class NewsController@Inject()(
 
 
   /***************** about collection *********************/
-  def createCollect()=Action.async{
-
+  def createCollect(userId:Long,newsId:Long,token:String)=Action.async{implicit request=>
+    newsDAO.getNewsById(newsId).flatMap{
+      case Some(news)=>
+        val cateId = news.cateId
+        val newsTitle = news.title
+        val tags = news.tags
+        val createTime = System.currentTimeMillis()
+        newsDAO.createCollect(cateId,newsId,newsTitle,userId,createTime,tags).map{res=>
+          if(res>0l)
+            Ok(success)
+          else
+            Ok(ErrorCode.collectFailed)
+        }
+      case None=>
+        Future.successful(Ok(ErrorCode.newsNotExist))
+    }
   }
+
+
+  def getCollection(userId:Long,token:String,page:Int,pageSize:Option[Int])=Action.async{implicit request=>
+    val curPage = if(page<1) 1 else page
+    val curPageSize = pageSize.getOrElse(20)
+    newsDAO.getCollectByUser(userId,curPage,curPageSize).map{res=>
+      val cnt = res._1
+      val pageCnt = if(cnt%curPageSize==0) cnt/curPageSize else cnt/curPageSize + 1
+      val data = res._2.map{t=>
+        Json.obj(
+          "newsId" -> t.newsId,
+          "title" -> t.newsTitle,
+          "createTime" -> t.createTime
+        )
+      }
+      Ok(successResult(Json.obj("data"->data,"curPage"->curPage,"pageCnt"->pageCnt)))
+    }
+  }
+
 
 
 

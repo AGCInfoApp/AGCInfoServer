@@ -133,9 +133,15 @@ class NewsDAO @Inject()(
   }
 
 
+
   def getCollectByUser(userId:Long,page:Int,pageSize:Int)={
-    db.run(colloction.filter(_.userId===userId).sortBy(_.createTime.desc).
-      drop((page-1)*pageSize).take(pageSize).result)
+    val q = colloction.filter(_.userId===userId).sortBy(_.createTime.desc)
+    for{
+      num <- db.run(q.size.result)
+      data <- db.run(q.drop((page-1)*pageSize).take(pageSize).result)
+    }yield{
+      (num,data)
+    }
   }
 
 

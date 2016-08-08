@@ -27,6 +27,7 @@ trait JsonProtocols {
 
     val newsNotExist = jsonResult(1000301,"the news does not exist!")
     val deleteFailed = jsonResult(1000302,"failed to delete the news!")
+    val collectFailed = jsonResult(1000303,"failed to collect news!")
 
     val commentCreateFailed=jsonResult(1000401,"create comments failed!")
 
@@ -34,6 +35,8 @@ trait JsonProtocols {
 
     val uploadPicFailed = jsonResult(1000601,"上传失败！")
     val uploadPicEmpty =jsonResult(1000602, "图片不能为空！")
+
+    val sendMsgFailed = jsonResult(1000701,"发送失败，请稍后再试…")
   }
 
 

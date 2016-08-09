@@ -81,6 +81,9 @@ class Message@Inject()(
     messageDAO.getMessage(userId,chatUserId,curPage,curPageSize).map{seq=>
       val data = seq.map{msg=>
         Json.obj(
+        "id"->msg.id,
+        "sendId"->msg.sendId,
+        "receiveId"->msg.receiveId,
         "message"->msg.message,
         "createTime"->msg.createTime
         )

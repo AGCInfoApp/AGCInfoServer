@@ -27,7 +27,7 @@ POST        /prometheus/moment/createMoment           @controllers.Moment.create
 GET         /prometheus/moment/listMoment             @controllers.Moment.listMoment(userId:Long,page:Int,pageSize:Option[Int])
 POST        /prometheus/moment/createComment          @controllers.Moment.createComment
 POST        /prometheus/moment/createVote             @controllers.Moment.createVote
-
+GET         /prometheus/moment/getShare               @controllers.Moment.getMyShare(userId:Long,token:String,page:Int,pageSize:Option[Int])
 
 
 POST        /prometheus/service/uploadPic             @controllers.Service.uploadPic

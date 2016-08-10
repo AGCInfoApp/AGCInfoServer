@@ -207,7 +207,6 @@ class NewsController@Inject()(
 
 
 
-
 /************    for admin  **************/
   def deleteNews(newsId:Long)=Action.async{implicit request=>
     request.session.get(SessionKey.uType) match{

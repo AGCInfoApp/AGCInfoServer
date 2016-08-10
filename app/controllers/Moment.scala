@@ -184,6 +184,21 @@ class Moment@Inject()(
     }
   }
 
-
+  def getMyShare(userId:Long,token:String,page:Int,pageSize:Option[Int])=Action.async{implicit request=>
+    val curPage = if(page<1) 1 else page
+    val curPageSize = pageSize.getOrElse(20)
+    momentDAO.getUserShare(userId,curPage,curPageSize).map{seq=>
+      val data = seq.map{moment=>
+        Json.obj(
+          "id"->moment.id,
+          "newsId"->moment.newsId,
+          "newsTitle"->moment.newsTitle,
+          "newsPic"->moment.newsPic,
+          "createTime"->moment.createTime
+        )
+      }
+      Ok(successResult(Json.obj("data"->data)))
+    }
+  }
 
 }

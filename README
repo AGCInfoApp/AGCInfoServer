@@ -226,7 +226,7 @@ POST 参数
    "userId":1
 }
 
-
+5、我的分享 prometheus/moment/getShare?userId=1&token=aa&page=1
 
 
 

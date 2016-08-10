@@ -85,6 +85,11 @@ class MomentDAO@Inject()(
   }
 
 
+  def getUserShare(userId:Long,page:Int,pageSize:Int)={
+    db.run(moment.filter(t=>(t.userid===userId) && t.newsId>0l).sortBy(_.createTime.desc).
+      drop((page-1)*pageSize).take(pageSize).result)
+  }
+
 
 
 

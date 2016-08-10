@@ -15,7 +15,7 @@ trait SlickTables {
   import slick.jdbc.{GetResult => GR}
 
   /** DDL for all tables. Call .create to execute. */
-  lazy val schema: profile.SchemaDescription = Array(tCategory.schema, tChatList.schema, tCollection.schema, tFriend.schema, tMessage.schema, tMoment.schema, tMomentComment.schema, tMomentVote.schema, tNews.schema, tNewsComment.schema, tReadingRecord.schema, tUser.schema).reduceLeft(_ ++ _)
+  lazy val schema: profile.SchemaDescription = Array(tCategory.schema, tChatList.schema, tCollection.schema, tFriend.schema, tGoods.schema, tMessage.schema, tMoment.schema, tMomentComment.schema, tMomentVote.schema, tNews.schema, tNewsComment.schema, tReadingRecord.schema, tUser.schema).reduceLeft(_ ++ _)
   @deprecated("Use .schema instead of .ddl", "3.0")
   def ddl = schema
 
@@ -146,6 +146,41 @@ trait SlickTables {
   }
   /** Collection-like TableQuery object for table tFriend */
   lazy val tFriend = new TableQuery(tag => new tFriend(tag))
+
+  /** Entity class storing rows of table tGoods
+   *  @param id Database column id SqlType(BIGINT), AutoInc, PrimaryKey
+   *  @param title Database column title SqlType(VARCHAR), Length(50,true), Default()
+   *  @param price Database column price SqlType(BIGINT), Default(0)
+   *  @param pics Database column pics SqlType(VARCHAR), Length(3000,true), Default()
+   *  @param infopics Database column infoPics SqlType(VARCHAR), Length(4000,true), Default()
+   *  @param description Database column description SqlType(VARCHAR), Length(3000,true), Default() */
+  case class rGoods(id: Long, title: String = "", price: Long = 0L, pics: String = "", infopics: String = "", description: String = "")
+  /** GetResult implicit for fetching rGoods objects using plain SQL queries */
+  implicit def GetResultrGoods(implicit e0: GR[Long], e1: GR[String]): GR[rGoods] = GR{
+    prs => import prs._
+    rGoods.tupled((<<[Long], <<[String], <<[Long], <<[String], <<[String], <<[String]))
+  }
+  /** Table description of table goods. Objects of this class serve as prototypes for rows in queries. */
+  class tGoods(_tableTag: Tag) extends Table[rGoods](_tableTag, "goods") {
+    def * = (id, title, price, pics, infopics, description) <> (rGoods.tupled, rGoods.unapply)
+    /** Maps whole row to an option. Useful for outer joins. */
+    def ? = (Rep.Some(id), Rep.Some(title), Rep.Some(price), Rep.Some(pics), Rep.Some(infopics), Rep.Some(description)).shaped.<>({r=>import r._; _1.map(_=> rGoods.tupled((_1.get, _2.get, _3.get, _4.get, _5.get, _6.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+
+    /** Database column id SqlType(BIGINT), AutoInc, PrimaryKey */
+    val id: Rep[Long] = column[Long]("id", O.AutoInc, O.PrimaryKey)
+    /** Database column title SqlType(VARCHAR), Length(50,true), Default() */
+    val title: Rep[String] = column[String]("title", O.Length(50,varying=true), O.Default(""))
+    /** Database column price SqlType(BIGINT), Default(0) */
+    val price: Rep[Long] = column[Long]("price", O.Default(0L))
+    /** Database column pics SqlType(VARCHAR), Length(3000,true), Default() */
+    val pics: Rep[String] = column[String]("pics", O.Length(3000,varying=true), O.Default(""))
+    /** Database column infoPics SqlType(VARCHAR), Length(4000,true), Default() */
+    val infopics: Rep[String] = column[String]("infoPics", O.Length(4000,varying=true), O.Default(""))
+    /** Database column description SqlType(VARCHAR), Length(3000,true), Default() */
+    val description: Rep[String] = column[String]("description", O.Length(3000,varying=true), O.Default(""))
+  }
+  /** Collection-like TableQuery object for table tGoods */
+  lazy val tGoods = new TableQuery(tag => new tGoods(tag))
 
   /** Entity class storing rows of table tMessage
    *  @param id Database column id SqlType(BIGINT), AutoInc, PrimaryKey

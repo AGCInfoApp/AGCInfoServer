@@ -233,6 +233,7 @@ class UserController @Inject()(
       case _=>
       "0".toLong
     }
+    println(userId)
     if(userId!=0l){
       userDAO.getUserById(userId).map{
         case Some(user)=>

@@ -127,7 +127,7 @@ class UserDAO @Inject()(
     db.run(User.filter(t=>
       t.mobile === searchKey ||
       t.email === searchKey ||
-      t.username === searchKey
+        (t.username like ("%"+searchKey+"%"))
     ).result)
   }
 

@@ -24,7 +24,7 @@ class MomentDAO@Inject()(
   private val vote = SlickTables.tMomentVote
 
   def listMoment(userId:Long,page:Int,pageSize:Int)={
-    db.run(moment.filter(_.userid===userId).
+    db.run(moment.
       sortBy(_.createTime.desc).drop((page-1)*pageSize).take(pageSize).result)
   }
 

@@ -227,27 +227,6 @@ class UserController @Inject()(
 
 
   def searchUser(searchKey:String) = Action.async{implicit request=>
-    val userId = try{
-      searchKey.toLong
-    }catch {
-      case _=>
-      "0".toLong
-    }
-
-    if(userId!=0l){
-      userDAO.getUserById(userId).map{
-        case Some(user)=>
-          val data = List(Json.obj(
-            "userId"->user.id,
-            "nickname"->user.nickname,
-            "sex"->user.sex,
-            "pic"->user.pic
-          ))
-          Ok(successResult(Json.obj("data"->data)))
-        case None=>
-          Ok(ErrorCode.userNotExist)
-      }
-    }else{
       userDAO.searchUser(searchKey).map{seq=>
         if(seq.isEmpty){
           Ok(ErrorCode.userNotExist)
@@ -263,9 +242,8 @@ class UserController @Inject()(
           Ok(successResult(Json.obj("data"->data)))
         }
       }
-    }
-
   }
+
 
 
 

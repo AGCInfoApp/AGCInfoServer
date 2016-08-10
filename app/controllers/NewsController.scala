@@ -101,6 +101,18 @@ class NewsController@Inject()(
     }
   }
 
+  def listCate=Action.async{implicit request=>
+    newsDAO.listCate.map{seq=>
+      val data = seq.map{cate=>
+        Json.obj(
+          "cateId"->cate.cateId,
+          "category"->cate.category
+        )
+      }
+      Ok(successResult(Json.obj("data"->data)))
+    }
+  }
+
 
   /***********  comment  ***********/
 

@@ -37,7 +37,7 @@ GET         /prometheus/news/listByCat                @controllers.NewsControlle
 GET         /prometheus/news/getInfo                  @controllers.NewsController.getNewsInfo(newsId:Long,userId:Long)
 GET         /prometheus/news/search                   @controllers.NewsController.searchNews(searchKey:String)
 GET         /prometheus/news/getKeyword               @controllers.NewsController.getRecentKeyword
-
+GET         /prometheus/news/listCate                 @controllers.NewsController.listCate
 GET         /prometheus/news/deleteNews               @controllers.NewsController.deleteNews(newsId:Long)
 
 #routes for comment

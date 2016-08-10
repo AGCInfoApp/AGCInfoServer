@@ -253,6 +253,7 @@ POST
 
 7、获取推荐 prometheus/news/getRecommentNews?newsId=1
 
+8、类别列表 prometheus/news/listCate
 
 
 

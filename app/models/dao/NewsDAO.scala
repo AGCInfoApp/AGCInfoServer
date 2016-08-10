@@ -27,6 +27,7 @@ class NewsDAO @Inject()(
   private val news = SlickTables.tNews
   private val comments = SlickTables.tNewsComment
   private val colloction = SlickTables.tCollection
+  private val cate = SlickTables.tCategory
 
 
   def listNews(cateId:Int,curPage: Int, pageSize: Int) = {
@@ -58,6 +59,10 @@ class NewsDAO @Inject()(
 
   def getNewsCommentNum(newsId:Long)={
     db.run(comments.filter(_.newsId===newsId).size.result)
+  }
+
+  def listCate={
+    db.run(cate.result)
   }
 
 

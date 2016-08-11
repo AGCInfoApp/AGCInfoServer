@@ -10,9 +10,9 @@ import slick.driver.JdbcProfile
  * Created by springlustre on 2016/8/10.
  */
 @Singleton
-class GoodsDAO@Inject()(
-  val dbConfogProvider:DatabaseConfigProvider
-  ) extends HasDatabaseConfigProvider[JdbcProfile] {
+class GoodsDAO @Inject()(
+  protected val dbConfigProvider:DatabaseConfigProvider
+  )extends HasDatabaseConfigProvider[JdbcProfile] {
 
   import slick.driver.MySQLDriver.api._
   private val log = LoggerFactory.getLogger(this.getClass)

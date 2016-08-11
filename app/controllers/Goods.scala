@@ -41,7 +41,7 @@ class Goods@Inject()(
         val data = Json.obj(
           "goodsId"->goods.id,
           "title"->goods.title,
-          "price"->ToolUtil.doubleFormat(res.price/100),
+          "price"->ToolUtil.doubleFormat(goods.price /100),
           "pics"->goods.pics.split("#").toList,
           "infoPics"->goods.infopics.split("#").toList,
           "description"->goods.description

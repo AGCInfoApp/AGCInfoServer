@@ -27,7 +27,7 @@ class Goods@Inject()(
           "goodsId"->res.id,
           "goodsPic"->res.pics.split("#").headOption,
           "title"->res.title,
-          "price"->ToolUtil.doubleFormat(res.price)
+          "price"->ToolUtil.doubleFormat(res.price/100)
         )
       }
       Ok(successResult(Json.obj("data"->data)))
@@ -41,7 +41,7 @@ class Goods@Inject()(
         val data = Json.obj(
           "goodsId"->goods.id,
           "title"->goods.title,
-          "price"->goods.price,
+          "price"->ToolUtil.doubleFormat(res.price/100),
           "pics"->goods.pics.split("#").toList,
           "infoPics"->goods.infopics.split("#").toList,
           "description"->goods.description

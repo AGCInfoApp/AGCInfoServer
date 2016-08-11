@@ -37,6 +37,8 @@ trait JsonProtocols {
     val uploadPicEmpty =jsonResult(1000602, "图片不能为空！")
 
     val sendMsgFailed = jsonResult(1000701,"发送失败，请稍后再试…")
+
+    val goodsNotExist = jsonResult(1000801,"商品不存在!")
   }
 
 

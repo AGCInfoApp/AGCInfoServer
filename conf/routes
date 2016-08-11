@@ -32,6 +32,10 @@ GET         /prometheus/moment/getShare               @controllers.Moment.getMyS
 
 POST        /prometheus/service/uploadPic             @controllers.Service.uploadPic
 
+# routes for goods
+GET         /prometheus/shop/listGoods                @controllers.Goods.listGoods(page:Int,pageSize:Option[Int])
+GET         /prometheus/shop/getGoodsInfo             @controllers.Goods.getGoodsInfo(goodsId:Long)
+
 # routes for news
 GET         /prometheus/news/listByCat                @controllers.NewsController.listNews(cateId:Int,page:Int,pageSize:Option[Int])
 GET         /prometheus/news/getInfo                  @controllers.NewsController.getNewsInfo(newsId:Long,userId:Long)
